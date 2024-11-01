@@ -18,15 +18,25 @@ const SignUp = () => {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+  // Define password criteria as an array of tuples
+  const passwordCriteria = [
+    [password.length >= 8, "At least 8 characters"],
+    [/[A-Z]/.test(password), "At least one uppercase letter"],
+    [/[a-z]/.test(password), "At least one lowercase letter"],
+    [/\d/.test(password), "At least one number"],
+    [
+      /[!@#$%^&*]/.test(password),
+      "At least one special character (e.g., @, $, !, %, *, ?)",
+    ],
+  ];
+
   const handleSignup = async (e) => {
     e.preventDefault();
     setError(null);
 
-    // Check password constraints
-    if (!passwordRegex.test(password)) {
-      setError(
-        "- At least 8 characters\n - At least one uppercase letter \n - One lowercase letter \n - One number \n - One special character"
-      );
+    // Check if all criteria pass before allowing signup
+    if (!passwordCriteria.every(([isValid]) => isValid)) {
+      setError("Password does not meet all criteria.");
       return;
     }
 
@@ -86,7 +96,7 @@ const SignUp = () => {
           </button>
         </div>
 
-        {error && (
+        {/* {error && (
           <div className="w-3/6">
             {error.split("\n").map((line, index) => (
               <p className="text-red-600" key={index}>
@@ -94,7 +104,20 @@ const SignUp = () => {
               </p>
             ))}
           </div>
-        )}
+        )} */}
+
+        <div className="mb-4 w-3/6">
+          <ul className="text-sm">
+            {passwordCriteria.map(([isValid, message], index) => (
+              <li
+                key={index}
+                className={isValid ? "text-green-600" : "text-red-600"}
+              >
+                - {message}
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <button
           type="submit"
