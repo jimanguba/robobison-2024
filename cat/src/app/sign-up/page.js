@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { FaRegEye } from "react-icons/fa";
@@ -13,10 +14,7 @@ const SignUp = () => {
   const [error, setError] = useState(null); // Print out the error --> Password doesnt satisfy some constraints
   const [createUserWithEmailAndPassword] =
     useCreateUserWithEmailAndPassword(auth); // create user hook
-
-  // Password validation regex
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const router = useRouter();
 
   // Define password criteria as an array of tuples
   const passwordCriteria = [
@@ -43,9 +41,11 @@ const SignUp = () => {
     try {
       const res = await createUserWithEmailAndPassword(email, password);
       console.log(res);
-      console.log("Cai dcm");
+
       setEmail("");
       setPassword("");
+
+      router.push("/");
     } catch (err) {
       console.log(e);
     }
@@ -95,16 +95,6 @@ const SignUp = () => {
             )}
           </button>
         </div>
-
-        {/* {error && (
-          <div className="w-3/6">
-            {error.split("\n").map((line, index) => (
-              <p className="text-red-600" key={index}>
-                {line}
-              </p>
-            ))}
-          </div>
-        )} */}
 
         <div className="mb-4 w-3/6">
           <ul className="text-sm">
