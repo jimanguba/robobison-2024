@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useSignInWithEmailAndPassword,
+  useAuthState,
+} from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
@@ -11,40 +14,33 @@ const LogIn = () => {
   const [email, setEmail] = useState(""); // User email
   const [password, setPassword] = useState(""); // User password
   const [passwordVisibility, setPasswordVisibility] = useState(false); // Show/hide password
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, user] = useAuthState(auth);
 
   const router = useRouter();
 
-  const handleLogIn = async (e) => {
-    e.preventDefault();
-
-    // try {
-    //   const res = await signInWithEmailAndPassword(auth, email, password);
-    //   console.log(res);
-
-    //   setEmail("");
-    //   setPassword("");
-
-    //   router.push("/");
-    // } catch (err) {
-    //   console.err(err);
-    // }
-
-    const res = await signInWithEmailAndPassword(email, password);
-    if (res) {
-      router.push("/"); // Redirect on successful login
-    } else if (error) {
-      console.log("Login error:", error.message);
-    }
-  };
-
-  // Redirect if user is already logged in
+  // Redirect to hompage if user already log in
   useEffect(() => {
     if (user) {
       router.push("/");
     }
   }, [user, router]);
+
+  // Handle log in from user
+  const handleLogIn = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      console.log(res);
+
+      setEmail("");
+      setPassword("");
+
+      router.push("/");
+    } catch (err) {
+      console.err(err);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#F6E9E0]">
