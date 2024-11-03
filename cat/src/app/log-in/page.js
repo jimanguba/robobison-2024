@@ -1,61 +1,56 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 
-const SignUp = () => {
+const LogIn = () => {
   const [email, setEmail] = useState(""); // User email
   const [password, setPassword] = useState(""); // User password
   const [passwordVisibility, setPasswordVisibility] = useState(false); // Show/hide password
-  const [error, setError] = useState(null); // Print out the error --> Password doesnt satisfy some constraints
-  const [createUserWithEmailAndPassword] =
-    useCreateUserWithEmailAndPassword(auth); // create user hook
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+
   const router = useRouter();
 
-  // Define password criteria as an array of tuples
-  const passwordCriteria = [
-    [password.length >= 8, "At least 8 characters"],
-    [/[A-Z]/.test(password), "At least one uppercase letter"],
-    [/[a-z]/.test(password), "At least one lowercase letter"],
-    [/\d/.test(password), "At least one number"],
-    [
-      /[!@#$%^&*]/.test(password),
-      "At least one special character (e.g., @, $, !, %, *, ?)",
-    ],
-  ];
-
-  const handleSignup = async (e) => {
+  const handleLogIn = async (e) => {
     e.preventDefault();
-    setError(null);
 
-    // Check if all criteria pass before allowing signup
-    if (!passwordCriteria.every(([isValid]) => isValid)) {
-      setError("Password does not meet all criteria.");
-      return;
-    }
+    // try {
+    //   const res = await signInWithEmailAndPassword(auth, email, password);
+    //   console.log(res);
 
-    try {
-      const res = await createUserWithEmailAndPassword(email, password);
-      console.log(res);
+    //   setEmail("");
+    //   setPassword("");
 
-      setEmail("");
-      setPassword("");
+    //   router.push("/");
+    // } catch (err) {
+    //   console.err(err);
+    // }
 
-      router.push("/");
-    } catch (err) {
-      console.log(e);
+    const res = await signInWithEmailAndPassword(email, password);
+    if (res) {
+      router.push("/"); // Redirect on successful login
+    } else if (error) {
+      console.log("Login error:", error.message);
     }
   };
 
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#F6E9E0]">
-      <h1 className="text-black text-6xl">Sign Up</h1>
+      <h1 className="text-black text-6xl">Log In</h1>
       <form
-        onSubmit={handleSignup}
+        onSubmit={handleLogIn}
         className="flex flex-col items-center justify-center h-screen bg-[#EEDFD5] w-3/6 h-3/6 m-10"
       >
         <label htmlFor="email" className="block text-black text-2xl">
@@ -96,28 +91,15 @@ const SignUp = () => {
           </button>
         </div>
 
-        <div className="mb-4 w-3/6">
-          <ul className="text-sm">
-            {passwordCriteria.map(([isValid, message], index) => (
-              <li
-                key={index}
-                className={isValid ? "text-green-600" : "text-red-600"}
-              >
-                - {message}
-              </li>
-            ))}
-          </ul>
-        </div>
-
         <button
           type="submit"
           className="w-3/6 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors duration-300"
         >
-          Sign Up
+          Log In
         </button>
       </form>
     </div>
   );
 };
 
-export default SignUp;
+export default LogIn;
