@@ -1,11 +1,15 @@
 import Image from "next/image";
-import catEars from  './images/DESIGN_catHead-removebg-preview.png';
+import catFace from  './images/DESIGN_catHead-removebg-preview.png';
+//import catEars from  './images/DESIGN_catEar-removebg-preview.png'; 
+
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      Cat app :p
-      <Image src = {catEars} alt = "Cat ears"></Image>
-    </div> 
+    <div className="gradient-background">
+      <h2 className="landing-page-message">Hello! Welcome to</h2>
+      <Image className = "cat-image" src = {catFace} alt = "Cat face"></Image>
+      <h1 className="landing-page-title">Cat app :p</h1>
+    </div>
+
   );
 }

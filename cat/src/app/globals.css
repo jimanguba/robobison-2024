@@ -19,3 +19,63 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+.gradient-background {
+  background: linear-gradient(to right, purple, pink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: white;
+}
+
+@keyframes breathe-and-tilt {
+  0%, 100% {
+    transform: scale(1) rotate(0deg); /* Normal size and no rotation */
+  }
+  50% {
+    transform: scale(1.05) rotate(2deg); /* Scale up by 5% and tilt slightly to the right */
+  }
+  75% {
+    transform: scale(1.05) rotate(-2deg); /* Tilt slightly to the left */
+  }
+}
+
+.cat-image {
+  animation: breathe-and-tilt 3s ease-in-out infinite; /* Apply the breathing and tilting animation */
+}
+
+@font-face {
+  font-family: 'GoMocha';
+  src: url('./fonts/GOMOCHA-OZJQ.OTF') format('opentype'); /*IMPORTANT TO USE THE DOT BEFORE FONTS PATH*/
+  font-weight: normal; 
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'ReadyForFall';
+  src: url('./fonts/READY FOR FALL.TTF') format('opentype'); /*IMPORTANT TO USE THE DOT BEFORE FONTS PATH*/
+  font-weight: normal; 
+  font-style: normal; 
+}
+
+.landing-page-title {
+  font-family: 'GoMocha', sans-serif; /* Fallback to sans-serif */
+  font-size: 4rem; /* Adjust the size as needed */
+  text-align: center; /* Center the text */
+  margin-top: 10px; /* Space between the image and the title */
+  color: #333; /* Change to your desired color */
+}
+
+.landing-page-message {
+  font-family: 'ReadyForFall', sans-serif; /* Fallback to sans-serif */
+  font-size: 2rem; /* Adjust the size as needed */
+  text-align: center; /* Center the text */
+  margin-top: 10px; /* Space between the image and the title */
+  color: #333; /* Change to your desired color */
+}
+
+
