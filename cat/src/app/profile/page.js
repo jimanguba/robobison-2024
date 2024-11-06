@@ -1,9 +1,7 @@
-import Image from "next/image";
-
-export default function Home() {
+export default function Profile() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#F6E9E0]">
-      Cat app :p
+      <h1>Profile Page</h1>
     </div>
   );
 }
