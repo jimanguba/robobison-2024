@@ -17,6 +17,7 @@ datasource db {
 model User {
   uid            String         @id @unique // Firebase User ID is the primary key
   name           String?        // Optional user name
+  fcmToken       String?        // for push notifications
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 
