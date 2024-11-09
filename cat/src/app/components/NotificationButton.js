@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import { getToken, onMessage } from "firebase/messaging";
-import { auth, messaging } from "../firebase/config"; // Import Firebase Auth and Messaging
+import { auth, messaging } from "@/lib/firebaseClient";
 import { onAuthStateChanged } from "firebase/auth";
 import Message from "./Message";
 import styles from "../../styles/NotificationButton.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function NotificationButton() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -75,7 +76,19 @@ export default function NotificationButton() {
           serviceWorkerRegistration: registration,
         });
 
-        if (token) {
+        if (token && user) {
+          // Save the FCM token to Supabase for the authenticated user
+          const { error } = await supabase
+            .from("User")
+            .update({ fcmToken: token })
+            .eq("uid", user.uid);
+
+          if (error) {
+            console.error("Error saving FCM token to Supabase:", error);
+          } else {
+            console.log("FCM token saved to Supabase successfully");
+          }
+
           setNotificationsEnabled(true);
           onMessage(messaging, (payload) => {
             toast.info(
@@ -109,28 +122,6 @@ export default function NotificationButton() {
     }
   };
 
-  // Toggle notifications on/off
-  const toggleNotifications = () => {
-    if (!notificationsEnabled) {
-      enableNotifications();
-    } else {
-      setNotificationsEnabled(false);
-    }
-  };
-
-  // Function to trigger a test notification
-  const triggerTestNotification = () => {
-    toast.info("Test Notification: This is a test notification", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
   return (
     <div className={styles.floatingButtonContainer}>
       <button
@@ -146,18 +137,12 @@ export default function NotificationButton() {
           <div className={styles.dropdownHeader}>
             <span>Notifications</span>
             <button
-              onClick={toggleNotifications}
+              onClick={enableNotifications}
               className={styles.toggleButton}
             >
               {notificationsEnabled ? "Turn Off" : "Turn On"}
             </button>
           </div>
-          <button
-            onClick={triggerTestNotification}
-            className={styles.testButton}
-          >
-            Trigger Test Notification
-          </button>
           {notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <Message key={index} notification={notification} />

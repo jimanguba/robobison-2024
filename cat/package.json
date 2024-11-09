@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "@supabase/supabase-js": "^2.46.1",
     "firebase": "^11.0.1",
     "next": "15.0.1",
     "prisma": "^5.22.0",

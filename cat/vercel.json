@@ -1,0 +1,13 @@
+{
+    "functions": {
+        "api/reminders/send": {
+            "runtime": "nodejs16.x"
+        }
+    },
+    "crons": [
+        {
+            "path": "/api/reminders/send",
+            "schedule": "*/5 * * * *"
+        }
+    ]
+}
