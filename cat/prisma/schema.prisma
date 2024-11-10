@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DIRECT_URL")
+}
+
+// User model to store Firebase user ID (minimal user info)
+model User {
+  uid            String         @id @unique // Firebase User ID is the primary key
+  name           String?        // Optional user name
+  fcmToken       String?        // for push notifications
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relations
+  cats           Cat[]
+  journalEntries JournalEntry[]
+  notifications  Notification[]
+}
+
+// Cat model to represent each individual cat
+model Cat {
+  id             Int            @id @default(autoincrement())
+  name           String
+  breed          String?
+  age            Int?
+  ownerUid       String         // Foreign key to User (Firebase uid)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relations
+  owner          User           @relation(fields: [ownerUid], references: [uid])
+  journalEntries JournalEntry[]
+}
+
+// JournalEntry model to represent individual journal entries for a cat (mood, medical, etc.)
+model JournalEntry {
+  id             Int            @id @default(autoincrement())
+  catId          Int            // Foreign key to Cat
+  userUid        String         // Foreign key to User (Firebase uid) - optional
+  type           String         // Type of entry (e.g., "Medical", "Mood", "General")
+  description    String         // Description of the journal entry
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relations
+  cat            Cat            @relation(fields: [catId], references: [id])
+  user           User           @relation(fields: [userUid], references: [uid])
+}
+
+// Notification model to represent user notifications
+model Notification {
+  id             Int            @id @default(autoincrement())
+  userUid        String         // Foreign key to User (Firebase uid)
+  title          String         // Title of the notification
+  message        String         // Body of the notification
+  isRead         Boolean        @default(false) // To track whether the notification has been read
+  createdAt      DateTime       @default(now())
+  reminderTime   DateTime
+
+  // Relations
+  user           User           @relation(fields: [userUid], references: [uid])
+}

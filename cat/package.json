@@ -4,19 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^5.21.1",
+    "@prisma/client": "^5.22.0",
+    "@supabase/supabase-js": "^2.46.1",
     "firebase": "^11.0.1",
     "next": "15.0.1",
-    "prisma": "^5.21.1",
+    "prisma": "^5.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-firebase-hooks": "^5.1.1",
-    "react-icons": "^5.3.0"
+    "react-icons": "^5.3.0",
+    "react-toastify": "^10.0.6"
   },
   "devDependencies": {
     "postcss": "^8",
