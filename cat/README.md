@@ -34,3 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Supabase will be used for storing user-related data and reminders.
+Firebase will be used for sending push notifications at specific times.
+Supabase and Firestore (Firebase's database) will both be used, with Supabase as the main data store and Firestore as the system for triggering notifications.

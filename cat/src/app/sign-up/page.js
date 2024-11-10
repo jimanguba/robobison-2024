@@ -2,18 +2,14 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config";
-import { FaRegEye } from "react-icons/fa";
-import { FaRegEyeSlash } from "react-icons/fa";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
   const [email, setEmail] = useState(""); // User email
   const [password, setPassword] = useState(""); // User password
   const [passwordVisibility, setPasswordVisibility] = useState(false); // Show/hide password
-  const [error, setError] = useState(null); // Print out the error --> Password doesnt satisfy some constraints
-  const [createUserWithEmailAndPassword] =
-    useCreateUserWithEmailAndPassword(auth); // create user hook
+  const [error, setError] = useState(null); // Print out the error --> Password doesn't satisfy some constraints
   const router = useRouter();
 
   // Define password criteria as an array of tuples
@@ -28,6 +24,7 @@ const SignUp = () => {
     ],
   ];
 
+  // Function to handle user sign-up
   const handleSignup = async (e) => {
     e.preventDefault();
     setError(null);
@@ -39,15 +36,50 @@ const SignUp = () => {
     }
 
     try {
-      const res = await createUserWithEmailAndPassword(email, password);
-      console.log(res);
+      const auth = getAuth();
+      // Create user with Firebase
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const user = res.user;
 
-      setEmail("");
-      setPassword("");
+      if (user) {
+        // Add the user to the database
+        await addUserToDatabase(user);
 
-      router.push("/");
+        // Clear the form
+        setEmail("");
+        setPassword("");
+
+        // Redirect to the home page
+        router.push("/");
+      }
     } catch (err) {
-      console.log(e);
+      console.error("Sign up error:", err);
+      setError("Failed to sign up. Please try again.");
+    }
+  };
+
+  // Function to add user to the database using an API route
+  const addUserToDatabase = async (user) => {
+    try {
+      // The body should be a simple JSON object with only the uid
+      const response = await fetch("/api/users/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid, // Only the UID is provided from Firebase Auth
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add user to the database");
+      }
+
+      console.log("User added to database successfully");
+    } catch (error) {
+      console.error("Error adding user to the database:", error);
+      setError("Failed to save user information. Please try again.");
     }
   };
 
@@ -108,6 +140,8 @@ const SignUp = () => {
             ))}
           </ul>
         </div>
+
+        {error && <p className="text-red-600 mb-4">{error}</p>}
 
         <button
           type="submit"
