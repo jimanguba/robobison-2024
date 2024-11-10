@@ -1,14 +1,13 @@
 {
-    "build": {
-      "env": {
-        "DATABASE_URL":"postgresql://postgres.iqayemxlqhiblftjmlzl:yMTxkLh5qRd5Jyvp@aws-0-ca-central-1.pooler.supabase.com:5432/postgres"
-      }
-    },
     "functions": {
-      "api/**/*.js": {
-        "runtime": "nodejs20.x"
-      }
+        "api/reminders/send": {
+            "runtime": "nodejs16.x"
+        }
     },
-    "buildCommand": "prisma generate && next build"
-  }
-  
+    "crons": [
+        {
+            "path": "/api/reminders/send",
+            "schedule": "*/5 * * * *"
+        }
+    ]
+}
