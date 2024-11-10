@@ -21,7 +21,7 @@ body {
 }
 
 .gradient-background {
-  background: linear-gradient(to right, purple, pink);
+  background: #f6e9e0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -67,13 +67,26 @@ body {
   font-size: 4rem; /* Adjust the size as needed */
   text-align: center; /* Center the text */
   margin-top: 10px; /* Space between the image and the title */
-  color: #333; /* Change to your desired color */
+  color: #794f2c; /* Change to your desired color */
 }
 
 .landing-page-message {
   font-family: "ReadyForFall", sans-serif; /* Fallback to sans-serif */
-  font-size: 2rem; /* Adjust the size as needed */
+  font-size: 1.5rem; /* Adjust the size as needed */
   text-align: center; /* Center the text */
-  margin-top: 10px; /* Space between the image and the title */
-  color: #333; /* Change to your desired color */
+  margin-top: 45px; /* Space between the image and the title */
+  margin-bottom: 20px;
+  color: #794f2c; /* Change to your desired color */
+}
+
+.cat-button {
+  background: none; /* Remove default button background */
+  border: none; /* Remove default border */
+  cursor: pointer; /* Show a pointer on hover */
+  padding: 0; /* Remove padding */
+}
+
+.cat-button:hover .cat-image {
+  transform: scale(1.1); /* Slight zoom on hover */
+  transition: transform 0.3s ease; /* Smooth transition */
 }
