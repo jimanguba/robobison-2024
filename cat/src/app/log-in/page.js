@@ -2,19 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  useSignInWithEmailAndPassword,
-  useAuthState,
-} from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LogIn = () => {
   const [email, setEmail] = useState(""); // User email
   const [password, setPassword] = useState(""); // User password
   const [passwordVisibility, setPasswordVisibility] = useState(false); // Show/hide password
-  const [signInWithEmailAndPassword, user] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const router = useRouter();
 
@@ -23,7 +21,8 @@ const LogIn = () => {
     if (user) {
       router.push("/");
     }
-  }, [user, router]);
+    console.log(user);
+  }, [user]);
 
   // Handle log in from user
   const handleLogIn = async (e) => {
@@ -38,7 +37,7 @@ const LogIn = () => {
 
       router.push("/");
     } catch (err) {
-      console.err(err);
+      console.log(err);
     }
   };
 
