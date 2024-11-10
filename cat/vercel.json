@@ -1,0 +1,14 @@
+{
+    "build": {
+      "env": {
+        "DATABASE_URL":"postgresql://postgres.iqayemxlqhiblftjmlzl:yMTxkLh5qRd5Jyvp@aws-0-ca-central-1.pooler.supabase.com:5432/postgres"
+      }
+    },
+    "functions": {
+      "api/**/*.js": {
+        "runtime": "nodejs14.x"
+      }
+    },
+    "buildCommand": "prisma generate && next build"
+  }
+  
