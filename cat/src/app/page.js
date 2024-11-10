@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config";
+import { auth } from "@/lib/firebaseClient";
 import { useRouter } from "next/navigation";
-import LogOutButton from "./log-out/logoutButton";
+import LogOutButton from "./authentication/log-out/logoutButton";
 
 export default function Home() {
   const [user, loading, error] = useAuthState(auth);
@@ -14,7 +13,7 @@ export default function Home() {
   // Use useEffect to handle redirects outside of render cycle
   useEffect(() => {
     if (!user) {
-      router.push("/log-in");
+      router.push("/authentication/log-in");
     }
   }, [user, loading]);
 

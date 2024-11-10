@@ -1,0 +1,79 @@
+/* Floating button container, positioned in the top-right corner */
+.floatingButtonContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* The three-dot button to open the notifications dropdown */
+.floatingButton {
+  background-color: #f0f0f0;
+  width: 40px; /* Set the width to the desired size */
+  height: 40px; /* Make height equal to width */
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+
+.floatingButton:hover {
+  background-color: #e0e0e0;
+}
+
+@keyframes smoothFadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98); /* Start slightly above and scaled down */
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1.03); /* Bounce slightly past the final position */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Settle at the final position */
+  }
+}
+
+/* Dropdown container for notifications */
+.dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  opacity: 0; /* Initially hidden */
+  animation: smoothFadeSlideIn 0.4s ease forwards; /* Play animation on load */
+}
+
+/* Header inside the dropdown, includes the "Notifications" title and toggle button */
+.dropdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* Button to toggle notifications on/off */
+.toggleButton {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+}
