@@ -1,5 +1,5 @@
 import prisma from "../../../../lib/prisma";
-import { messaging } from "@/lib/firebaseClient";
+import { messaging } from "@/lib/firebaseAdmin";
 export async function GET() {
   try {
     const now = new Date();
