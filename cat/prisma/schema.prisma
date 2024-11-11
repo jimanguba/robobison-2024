@@ -49,6 +49,7 @@ model JournalEntry {
   userUid        String         // Foreign key to User (Firebase uid) - optional
   type           String         // Type of entry (e.g., "Medical", "Mood", "General")
   description    String         // Description of the journal entry
+  moodMagnitude  Int            // Strength of the mood
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 
