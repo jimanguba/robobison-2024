@@ -18,6 +18,12 @@ export default function NotificationButton() {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
+  // Reference to track the current user state
+  const userRef = useRef();
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
+
   // Monitor the authentication state
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -37,15 +43,17 @@ export default function NotificationButton() {
   useEffect(() => {
     // Function to handle messages from the service worker
     const handleServiceWorkerMessage = (event) => {
+      console.log("Message received from Service Worker:", event.data);
+
       if (event.data && event.data.notification) {
         const payload = event.data;
 
-        console.log("Message received from Service Worker:", payload);
+        console.log("Processing Service Worker message:", payload);
 
         const newNotification = {
           title: payload.notification?.title,
           message: payload.notification?.body,
-          userUid: user?.uid,
+          userUid: userRef.current?.uid,
           isRead: false,
           createdAt: new Date().toISOString(),
         };
@@ -91,7 +99,7 @@ export default function NotificationButton() {
         handleServiceWorkerMessage
       );
     };
-  }, [user]); // Re-run this effect if `user` changes
+  }, [user]);
 
   // Toggle dropdown visibility
   const handleButtonClick = () => {
@@ -126,7 +134,8 @@ export default function NotificationButton() {
 
       if (permission === "granted") {
         const registration = await navigator.serviceWorker.register(
-          "/firebase-messaging-sw.js"
+          "/firebase-messaging-sw.js",
+          { scope: "/" }
         );
         console.log("Service Worker registered:", registration);
 

@@ -38,7 +38,13 @@ messaging.onBackgroundMessage(function (payload) {
     .matchAll({ type: "window", includeUncontrolled: true })
     .then(function (clients) {
       clients.forEach(function (client) {
-        client.postMessage(payload);
+        const broadcastPayload = {
+          notification: {
+            title: payload.notification.title,
+            body: payload.notification.body,
+          }
+        };
+        client.postMessage(broadcastPayload);
       });
     });
 });
