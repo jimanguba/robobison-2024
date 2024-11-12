@@ -1,5 +1,6 @@
 import prisma from "../../../../lib/prisma";
 import { messaging } from "@/lib/firebaseAdmin";
+
 export async function GET() {
   try {
     const now = new Date();
@@ -60,6 +61,23 @@ export async function GET() {
           console.log(`Successfully sent reminder to user ${user.uid}`);
         } catch (error) {
           console.error(`Error sending reminder to user ${user.uid}:`, error);
+
+          // Handle the "registration-token-not-registered" error
+          if (
+            error.errorInfo &&
+            error.errorInfo.code === "messaging/registration-token-not-registered"
+          ) {
+            // Step 6: Remove the invalid FCM token from the database
+            console.warn(`Removing invalid FCM token for user ${user.uid}`);
+            await prisma.user.update({
+              where: {
+                uid: user.uid,
+              },
+              data: {
+                fcmToken: null, // Clear the invalid FCM token
+              },
+            });
+          }
         }
       } else {
         console.error(
@@ -68,7 +86,7 @@ export async function GET() {
       }
     }
 
-    // Step 6: Return a success response
+    // Step 7: Return a success response
     return new Response(
       JSON.stringify({ message: "Reminders processed successfully." }),
       { status: 200 }

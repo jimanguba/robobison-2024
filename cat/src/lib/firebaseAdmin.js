@@ -7,6 +7,7 @@ const serviceAccount = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOU
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   });
 }
 
