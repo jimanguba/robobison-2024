@@ -122,6 +122,10 @@ export default function NotificationButton() {
     }
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className={styles.floatingButtonContainer}>
       <button
