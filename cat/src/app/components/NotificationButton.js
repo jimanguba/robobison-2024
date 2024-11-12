@@ -34,6 +34,65 @@ export default function NotificationButton() {
     return () => unsubscribeAuth();
   }, []);
 
+  useEffect(() => {
+    // Function to handle messages from the service worker
+    const handleServiceWorkerMessage = (event) => {
+      if (event.data && event.data.notification) {
+        const payload = event.data;
+
+        console.log("Message received from Service Worker:", payload);
+
+        const newNotification = {
+          title: payload.notification?.title,
+          message: payload.notification?.body,
+          userUid: user?.uid,
+          isRead: false,
+          createdAt: new Date().toISOString(),
+        };
+
+        // Show toast notification
+        toast.info(`${newNotification.title}: ${newNotification.message}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        // Add to local state
+        setNotifications((prev) => [newNotification, ...prev]);
+
+        // Save to Supabase
+        supabase
+          .from("notifications")
+          .insert(newNotification)
+          .then(({ error }) => {
+            if (error) {
+              console.error("Error saving notification to Supabase:", error);
+            } else {
+              console.log("Notification saved to Supabase successfully");
+            }
+          });
+      }
+    };
+
+    // Add event listener for messages from the service worker
+    navigator.serviceWorker.addEventListener(
+      "message",
+      handleServiceWorkerMessage
+    );
+
+    // Cleanup function to remove the listener when component unmounts
+    return () => {
+      navigator.serviceWorker.removeEventListener(
+        "message",
+        handleServiceWorkerMessage
+      );
+    };
+  }, [user]); // Re-run this effect if `user` changes
+
   // Toggle dropdown visibility
   const handleButtonClick = () => {
     setShowDropdown((prev) => !prev);
