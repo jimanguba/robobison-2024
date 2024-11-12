@@ -90,28 +90,44 @@ export default function NotificationButton() {
           }
 
           setNotificationsEnabled(true);
-          onMessage(messaging, (payload) => {
-            toast.info(
-              `${payload.notification?.title}: ${payload.notification?.body}`,
-              {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              }
-            );
-            setNotifications((prev) => [
-              ...prev,
-              {
-                title: payload.notification?.title,
-                body: payload.notification?.body,
-                image: payload.notification?.image,
-                receivedAt: new Date().toLocaleString(),
-              },
-            ]);
+          // In onMessage callback within enableNotifications:
+          onMessage(messaging, async (payload) => {
+            console.log("Foreground message received: ", payload);
+            const newNotification = {
+              title: payload.notification?.title,
+              message: payload.notification?.body,
+              userUid: user.uid,
+              isRead: false, // Initially, the notification is unread
+              createdAt: new Date().toISOString(), // Use ISO format for storing in DB
+            };
+
+            // Show toast notification
+            toast.info(`${newNotification.title}: ${newNotification.message}`, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+
+            // Add to local state
+            setNotifications((prev) => [newNotification, ...prev]);
+
+            // Save to Supabase
+            const { error: insertError } = await supabase
+              .from("notifications")
+              .insert(newNotification);
+
+            if (insertError) {
+              console.error(
+                "Error saving notification to Supabase:",
+                insertError
+              );
+            } else {
+              console.log("Notification saved to Supabase successfully");
+            }
           });
         }
       } else {
