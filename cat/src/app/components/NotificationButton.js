@@ -18,6 +18,12 @@ export default function NotificationButton() {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
+  // Reference to track the current user state
+  const userRef = useRef();
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
+
   // Monitor the authentication state
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -33,6 +39,67 @@ export default function NotificationButton() {
 
     return () => unsubscribeAuth();
   }, []);
+
+  useEffect(() => {
+    // Function to handle messages from the service worker
+    const handleServiceWorkerMessage = (event) => {
+      console.log("Message received from Service Worker:", event.data);
+
+      if (event.data && event.data.notification) {
+        const payload = event.data;
+
+        console.log("Processing Service Worker message:", payload);
+
+        const newNotification = {
+          title: payload.notification?.title,
+          message: payload.notification?.body,
+          userUid: userRef.current?.uid,
+          isRead: false,
+          createdAt: new Date().toISOString(),
+        };
+
+        // Show toast notification
+        toast.info(`${newNotification.title}: ${newNotification.message}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        // Add to local state
+        setNotifications((prev) => [newNotification, ...prev]);
+
+        // Save to Supabase
+        supabase
+          .from("notifications")
+          .insert(newNotification)
+          .then(({ error }) => {
+            if (error) {
+              console.error("Error saving notification to Supabase:", error);
+            } else {
+              console.log("Notification saved to Supabase successfully");
+            }
+          });
+      }
+    };
+
+    // Add event listener for messages from the service worker
+    navigator.serviceWorker.addEventListener(
+      "message",
+      handleServiceWorkerMessage
+    );
+
+    // Cleanup function to remove the listener when component unmounts
+    return () => {
+      navigator.serviceWorker.removeEventListener(
+        "message",
+        handleServiceWorkerMessage
+      );
+    };
+  }, [user]);
 
   // Toggle dropdown visibility
   const handleButtonClick = () => {
@@ -67,7 +134,8 @@ export default function NotificationButton() {
 
       if (permission === "granted") {
         const registration = await navigator.serviceWorker.register(
-          "/firebase-messaging-sw.js"
+          "/firebase-messaging-sw.js",
+          { scope: "/" }
         );
         console.log("Service Worker registered:", registration);
 
@@ -90,28 +158,44 @@ export default function NotificationButton() {
           }
 
           setNotificationsEnabled(true);
-          onMessage(messaging, (payload) => {
-            toast.info(
-              `${payload.notification?.title}: ${payload.notification?.body}`,
-              {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              }
-            );
-            setNotifications((prev) => [
-              ...prev,
-              {
-                title: payload.notification?.title,
-                body: payload.notification?.body,
-                image: payload.notification?.image,
-                receivedAt: new Date().toLocaleString(),
-              },
-            ]);
+          // In onMessage callback within enableNotifications:
+          onMessage(messaging, async (payload) => {
+            console.log("Foreground message received: ", payload);
+            const newNotification = {
+              title: payload.notification?.title,
+              message: payload.notification?.body,
+              userUid: user.uid,
+              isRead: false, // Initially, the notification is unread
+              createdAt: new Date().toISOString(), // Use ISO format for storing in DB
+            };
+
+            // Show toast notification
+            toast.info(`${newNotification.title}: ${newNotification.message}`, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+
+            // Add to local state
+            setNotifications((prev) => [newNotification, ...prev]);
+
+            // Save to Supabase
+            const { error: insertError } = await supabase
+              .from("notifications")
+              .insert(newNotification);
+
+            if (insertError) {
+              console.error(
+                "Error saving notification to Supabase:",
+                insertError
+              );
+            } else {
+              console.log("Notification saved to Supabase successfully");
+            }
           });
         }
       } else {
@@ -121,6 +205,10 @@ export default function NotificationButton() {
       console.error("Error during notification setup:", error);
     }
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className={styles.floatingButtonContainer}>
