@@ -206,6 +206,42 @@ export default function NotificationButton() {
     }
   };
 
+  // Schedule a notification to trigger after 30 seconds
+const scheduleNotification = () => {
+  console.log("Scheduling notification for 30 seconds later...");
+
+  const newNotification = {
+    title: "Scheduled Notification",
+    message: "This notification was scheduled 30 seconds ago.",
+    userUid: user?.uid || "Unknown",
+    isRead: false,
+    createdAt: new Date().toISOString(),
+  };
+
+  const localScheduledTime = new Date(new Date().getTime() + 30 * 1000); // 30 seconds from now in local time
+  console.log("Scheduled to trigger at local time:", localScheduledTime.toLocaleString());
+  
+  setTimeout(() => {
+    console.log("Triggering scheduled notification at local time:", new Date().toLocaleString());
+    console.log("Triggering scheduled notification at UTC time:", new Date().toISOString());
+
+    // Show toast notification
+    toast.info(`${newNotification.title}: ${newNotification.message}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+    // Add to local state
+    setNotifications((prev) => [newNotification, ...prev]);
+  }, 30000); // 30 seconds delay
+};
+
+
   if (!user) {
     return null;
   }
@@ -229,6 +265,12 @@ export default function NotificationButton() {
               className={styles.toggleButton}
             >
               {notificationsEnabled ? "Turn Off" : "Turn On"}
+            </button>
+            <button
+              onClick={scheduleNotification}
+              className={styles.testButton}
+            >
+              Schedule Test Notification
             </button>
           </div>
           {notifications.length > 0 ? (
