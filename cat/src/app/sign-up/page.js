@@ -19,7 +19,7 @@ const SignUp = () => {
     [/[a-z]/.test(password), "At least one lowercase letter"],
     [/\d/.test(password), "At least one number"],
     [
-      /[!@#$%^&*]/.test(password),
+      /[!@#$%^&*?. ]/.test(password),
       "At least one special character (e.g., @, $, !, %, *, ?)",
     ],
   ];
@@ -135,7 +135,7 @@ const SignUp = () => {
                 key={index}
                 className={isValid ? "text-green-600" : "text-red-600"}
               >
-                - {message}
+                {!isValid ? message : ""}
               </li>
             ))}
           </ul>

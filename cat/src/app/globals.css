@@ -20,34 +20,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.gradient-background {
-  background: #f6e9e0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  color: white;
-}
-
-@keyframes breathe-and-tilt {
-  0%,
-  100% {
-    transform: scale(1) rotate(0deg); /* Normal size and no rotation */
-  }
-  50% {
-    transform: scale(1.05) rotate(2deg); /* Scale up by 5% and tilt slightly to the right */
-  }
-  75% {
-    transform: scale(1.05) rotate(-2deg); /* Tilt slightly to the left */
-  }
-}
-
-.cat-image {
-  animation: breathe-and-tilt 3s ease-in-out infinite; /* Apply the breathing and tilting animation */
-}
-
 @font-face {
   font-family: "GoMocha";
   src: url("./fonts/GOMOCHA-OZJQ.OTF") format("opentype"); /*IMPORTANT TO USE THE DOT BEFORE FONTS PATH*/
@@ -77,16 +49,4 @@ body {
   margin-top: 45px; /* Space between the image and the title */
   margin-bottom: 20px;
   color: #794f2c; /* Change to your desired color */
-}
-
-.cat-button {
-  background: none; /* Remove default button background */
-  border: none; /* Remove default border */
-  cursor: pointer; /* Show a pointer on hover */
-  padding: 0; /* Remove padding */
-}
-
-.cat-button:hover .cat-image {
-  transform: scale(1.1); /* Slight zoom on hover */
-  transition: transform 0.3s ease; /* Smooth transition */
 }
