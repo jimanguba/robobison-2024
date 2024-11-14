@@ -6,6 +6,7 @@ import { auth } from "@/lib/firebaseClient";
 import { useRouter } from "next/navigation";
 import LogOutButton from "./authentication/log-out/logoutButton";
 import AddNotificationForm from "./components/AddNotificationForm";
+import MoodChart from "./journal/chart/MoodChart";
 
 export default function Home() {
   const [user, loading, error] = useAuthState(auth);
@@ -27,6 +28,7 @@ export default function Home() {
       Pet app: {user ? user.email : "Dume"}
       <AddNotificationForm />
       <LogOutButton />
+      <MoodChart></MoodChart>
     </div>
   );
 }
