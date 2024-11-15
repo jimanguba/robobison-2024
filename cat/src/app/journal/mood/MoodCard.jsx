@@ -1,69 +1,143 @@
 "use client";
 
-import React from "react";
-import { useState } from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import CardActionArea from "@mui/material/CardActionArea";
-import { Typography, Modal, Slider, Box } from "@mui/material";
-import Image from "next/image";
-const modalStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  height: "100vh", // Full viewport height to center vertically
-  flexDirection: "column",
-};
+import React, { useState } from "react";
+import { Slider, Box, TextField } from "@mui/material";
 
 export default function MoodCard() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [moodIntensity, setMoodIntensity] = useState(5); // Initial controlled value
+  const [moodIntensity, setMoodIntensity] = useState(3);
+  const [longAnswer, setLongAnswer] = useState("");
+
+  const handleChange = (event) => {
+    setLongAnswer(event.target.value);
+  };
+  const marks = [
+    { value: 1, label: "😭" },
+    { value: 2, label: "😔" },
+    { value: 3, label: "😐" },
+    { value: 4, label: "😊" },
+    { value: 5, label: "🤩" },
+  ];
 
   const handleSliderChange = (event, newValue) => {
-    setMoodIntensity(newValue); // Update state on slider change
+    setMoodIntensity(newValue);
   };
 
   return (
-    <div>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={modalStyle}>
-          <Image
-            width={300}
-            height={300}
-            src="data:image/jpeg;base64,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"
-            alt="Happy Cat"
-          ></Image>
-          <Slider
-            value={moodIntensity} // Use the controlled value
-            onChange={handleSliderChange} // Update value on change
-            step={1}
-            marks
-            min={1}
-            max={10}
-            valueLabelDisplay="auto"
-            sx={{ color: "#F6F9A3", width: "50%" }}
-          />
-        </Box>
-      </Modal>
+    // <Box sx={modalStyle}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        height: "100%",
+        width: "100%",
+        flexDirection: "column",
+        gap: "70px",
+        borderRadius: "15px",
+      }}
+    >
+      <h1 className="text-4xl font-bold text-blue-500 mt-6">
+        How's your Cat today?
+      </h1>
 
-      <Card sx={{ maxWidth: 345 }}>
-        <CardActionArea onClick={handleOpen}>
-          <CardMedia
-            component="img"
-            height="50"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT80o9ZQPmQF-xai3mwEOMV3tO4BAfaV6COaA&s"
-            alt="green iguana"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Happy
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </div>
+      <Slider
+        value={moodIntensity}
+        onChange={handleSliderChange}
+        step={1}
+        marks={marks.map((mark) => ({
+          ...mark,
+          label: (
+            <span
+              style={{
+                fontSize: "4rem",
+                color: moodIntensity === mark.value ? "blue" : "lightgray",
+                fontWeight: moodIntensity === mark.value ? "bold" : "normal",
+                opacity: moodIntensity === mark.value ? 1 : 0.5,
+              }}
+            >
+              {mark.label}
+            </span>
+          ),
+        }))}
+        min={1}
+        max={5}
+        valueLabelDisplay="on"
+        valueLabelFormat={(value) => {
+          switch (value) {
+            case 1:
+              return "Very Bad";
+            case 2:
+              return "Bad";
+            case 3:
+              return "Neutral";
+            case 4:
+              return "Good";
+            case 5:
+              return "Very Good";
+            default:
+              return value; // Fallback to the numeric value if no match
+          }
+        }}
+        sx={{
+          width: "50%",
+          "& .MuiSlider-valueLabel": {
+            backgroundColor: "transparent", // Transparent value label background
+            boxShadow: "none", // Remove any shadow
+            color: "orange", // Text color for the value label
+            fontSize: "2rem", // Adjust font size for readability
+            fontWeight: "bold", // Make the text bold
+            padding: 0, // Remove padding for cleaner look
+          },
+
+          "& .MuiSlider-rail": {
+            backgroundColor: "#CEAC3D", // Keep the track line light
+          },
+          "& .MuiSlider-track": {
+            backgroundColor: "#CEAC3D", // Make the moving part of the track invisible
+          },
+          "& .MuiSlider-thumb": {
+            backgroundColor: "#F6F9A3", // Marker color
+            width: "30px", // Adjust the width of the dot
+            height: "30px", // Adjust the height of the dot
+            borderRadius: "50%", // Ensure the dot is circular
+          },
+          "& .MuiSlider-markLabel": {
+            top: 30, // Position labels slightly below the track
+          },
+
+          "& .MuiSlider-mark": {
+            width: "12px", // Adjust the width of the dot
+            height: "12px", // Adjust the height of the dot
+            borderRadius: "50%", // Ensure the dot is circular
+            backgroundColor: "yellow", // Color of the dots
+            transform: "translateX(-50%) translateY(-50%)", // Center the dots
+          },
+        }}
+      />
+
+      <h1 className="text-4xl font-bold text-blue-500 mt-6">
+        What's wrong bro?
+      </h1>
+      <TextField
+        label="Tell me your shit"
+        placeholder="Tell me..."
+        multiline
+        rows={8} // Number of visible rows
+        variant="outlined" // Style: outlined, filled, or standard
+        fullWidth // Makes the input span full width
+        value={longAnswer}
+        onChange={handleChange}
+        sx={{
+          "& .MuiInputBase-root": {
+            fontSize: "1.2rem", // Adjust font size for better readability
+          },
+          "& .MuiInputLabel-root": {
+            fontSize: "1.2rem", // Adjust label font size
+          },
+          "& .MuiOutlinedInput-root": {
+            borderRadius: "8px", // Customize border radius
+          },
+        }}
+      />
+    </Box>
   );
 }
