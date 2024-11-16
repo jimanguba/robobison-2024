@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 
-import catFace from "./images/Cat.png";
-
 import bgPinkLow from "./images/bg-pinkLow.webp";
 import bgPinkMid from "./images/bg-pinkMid.webp";
 import bgPinkHigh from "./images/bg-pinkHigh.webp";
@@ -13,13 +11,52 @@ import bgPurpleLow from "./images/bg-purpleLow.webp";
 import bgPurpleMid from "./images/bg-purpleMid.webp";
 import bgPurpleHigh from "./images/bg-purpleHigh.webp";
 
-function Cat() {
+import catTail from "./images/CatTail.png";
+import catFace1 from "./images/Cat-Mood1.png";
+import catFace2 from "./images/Cat-Mood2.png";
+import catFace3 from "./images/Cat-Mood3.png";
+import catFace4 from "./images/Cat-Mood4.png";
+import catFace5 from "./images/Cat-Mood5.png";
+
+export function Cat({ mood }) {
+  let catFace;
+  let catTailAnimation;
+
+  switch (mood) {
+    case 1:
+      catFace = catFace1;
+      catTailAnimation = "animate-shake1";
+      break;
+    case 2:
+      catFace = catFace2;
+      catTailAnimation = "animate-shake2";
+      break;
+    case 3: //or put this to default whatever (neutral)
+      catFace = catFace3;
+      catTailAnimation = "animate-shake3";
+      break;
+    case 4:
+      catFace = catFace4;
+      catTailAnimation = "animate-shake4";
+      break;
+    case 5:
+      catFace = catFace5;
+      catTailAnimation = "animate-shake5";
+      break;
+  }
+
   return (
-    <div>
+    <div className="relative w-auto h-auto">
       <Image
-        className="animate-wiggle w-96 h-auto max-w-full"
+        className="animate-wiggle h-80 w-auto max-w-full relative z-10"
         src={catFace}
         alt="Cat face"
+      />
+
+      <Image
+        className={`absolute w-96 h-auto bottom-0 left-20 z-0 ${catTailAnimation}`}
+        src={catTail}
+        alt="Cat tail"
       />
     </div>
   );
@@ -67,21 +104,25 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="relative z-1">
+    <div className="relative z-10">
       <Background />
-      <div className="relative z-2 flex flex-col items-center justify-center min-h-screen">
-        <h2 className="text-center">meow!</h2>
+      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen">
+        <h2 className="absolute text-black z-20 -top-10 -left-10 rotate-[-5deg] text-center">
+          meow!
+        </h2>
         <button
           className="transition-transform duration-500 transform hover:scale-105"
-          onClick={() => router.push("/sign-up")}
+          onClick={() => router.push("/authentication/sign-up")}
         >
-          <Cat />
+          <Cat mood={3} />
         </button>
         <h1 className="landing-page-title">CAT JOURNAL</h1>
       </div>
     </div>
   );
 }
+
+//TODO fix the meow! to the side. Fix the font. Do something with the background and make it prettier. Decor: make some 'meow's appear on the screen at some places floating on screen (lower opacity)
 
 //COMMENTS HERE ARE BY ASHLEY BCS SHE WAS LEARNING REACT ETC.
 
