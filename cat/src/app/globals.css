@@ -20,22 +20,33 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-#notificationHeader {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 20px;
-  font-weight: bold;
+@font-face {
+  font-family: "GoMocha";
+  src: url("./fonts/GOMOCHA-OZJQ.OTF") format("opentype"); /*IMPORTANT TO USE THE DOT BEFORE FONTS PATH*/
+  font-weight: normal;
+  font-style: normal;
 }
 
-#notificationBody {
-  margin-top: 10px;
-  text-align: center;
+@font-face {
+  font-family: "ReadyForFall";
+  src: url("./fonts/READY FOR FALL.TTF") format("opentype"); /*IMPORTANT TO USE THE DOT BEFORE FONTS PATH*/
+  font-weight: normal;
+  font-style: normal;
 }
 
-#imageContainer {
-  display: flex;
-  align-items: center;
-  height: 100px;
-  object-fit: contain;
+.landing-page-title {
+  font-family: "GoMocha", sans-serif; /* Fallback to sans-serif */
+  font-size: 4rem; /* Adjust the size as needed */
+  text-align: center; /* Center the text */
+  margin-top: 10px; /* Space between the image and the title */
+  color: #794f2c; /* Change to your desired color */
+}
+
+.landing-page-message {
+  font-family: "ReadyForFall", sans-serif; /* Fallback to sans-serif */
+  font-size: 1.5rem; /* Adjust the size as needed */
+  text-align: center; /* Center the text */
+  margin-top: 45px; /* Space between the image and the title */
+  margin-bottom: 20px;
+  color: #794f2c; /* Change to your desired color */
 }
