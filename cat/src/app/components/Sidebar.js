@@ -105,20 +105,20 @@ const Sidebar = () => {
         </Box>
         <Divider sx={{ mb: 2, backgroundColor: '#d4a373' }} />
         <List className={geistSans.variable}>
-          <ListItem component={Link} button="true" href="/" onClick={toggleDrawer}>
+          <ListItem component={Link} button="true" href="/cats" onClick={toggleDrawer}>
             <HomeIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText
               primary="Home"
               primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
             />
           </ListItem>
-          <ListItem component={Link} button="true" href="/cats" onClick={toggleDrawer}>
+          {/* <ListItem component={Link} button="true" href="/cats" onClick={toggleDrawer}>
             <PetsIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText
               primary="Cat Page"
               primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
             />
-          </ListItem>
+          </ListItem> */}
           <ListItem component={Link} button="true" href="/cats/list" onClick={toggleDrawer}>
             <PetsIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText

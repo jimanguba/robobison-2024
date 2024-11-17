@@ -28,13 +28,13 @@ const CatsPage = () => {
           variant="h3"
           sx={{ fontWeight: 'bold', color: '#6b4226' }}
         >
-          Welcome to the Cat Page!
+          Welcome to the CATJ App!
         </Typography>
         <Typography
           variant="h6"
           sx={{ color: '#8b6f47', mt: 1 }}
         >
-          Manage and add new feline friends.
+          Catch your cat's feelings, manage their well-being, and add new feline friends!
         </Typography>
       </Box>
 
