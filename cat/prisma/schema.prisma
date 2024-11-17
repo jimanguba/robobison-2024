@@ -32,7 +32,7 @@ model Cat {
   id             Int            @id @default(autoincrement())
   name           String
   breed          String?
-  age            Int?
+  birthday       DateTime?
   ownerUid       String         // Foreign key to User (Firebase uid)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
