@@ -73,7 +73,7 @@ export default function Home() {
         <h2 className="text-center">meow!</h2>
         <button
           className="transition-transform duration-500 transform hover:scale-105"
-          onClick={() => router.push("/sign-up")}
+          onClick={() => router.push("/authentication/sign-up")}
         >
           <Cat />
         </button>
