@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Link from "next/link";
 import {
   Drawer,
@@ -11,10 +11,10 @@ import {
   Box,
   Fab,
 } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
-import PetsIcon from '@mui/icons-material/Pets';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import PetsIcon from "@mui/icons-material/Pets";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import LogOutButton from "../authentication/log-out/logoutButton";
 import React, { useState, useEffect } from "react";
 
@@ -29,7 +29,6 @@ const geistMono = localFont({
   src: "../fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
 });
-
 
 const Sidebar = () => {
   // State to control drawer visibility
@@ -58,16 +57,16 @@ const Sidebar = () => {
         color="primary"
         onClick={toggleDrawer}
         sx={{
-          position: 'fixed',
+          position: "fixed",
           top: 20,
           left: isDrawerOpen ? 300 : 20,
-          backgroundColor: '#8b6f47',
-          '&:hover': {
-            backgroundColor: '#a07855',
+          backgroundColor: "#8b6f47",
+          "&:hover": {
+            backgroundColor: "#a07855",
           },
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          transform: isDrawerOpen ? 'rotate(90deg)' : 'rotate(0deg)',
-          transition: 'all 0.3s ease-in-out',
+          transform: isDrawerOpen ? "rotate(90deg)" : "rotate(0deg)",
+          transition: "all 0.3s ease-in-out",
         }}
       >
         <MenuIcon />
@@ -85,12 +84,17 @@ const Sidebar = () => {
             boxSizing: "border-box",
             backgroundColor: "#f9f5f0",
             padding: "20px",
-            transition: 'width 0.3s ease-in-out',
+            transition: "width 0.3s ease-in-out",
           },
         }}
       >
         <Box
-          sx={{ display: 'flex', alignItems: 'center', mb: 2, transition: 'all 0.3s ease-in-out' }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mb: 2,
+            transition: "all 0.3s ease-in-out",
+          }}
           className={geistSans.variable} // Applying the custom font
         >
           <HomeIcon sx={{ mr: 1, color: "#8b6f47" }} />
@@ -98,18 +102,32 @@ const Sidebar = () => {
             variant="h5"
             component={Link}
             href="/"
-            sx={{ textDecoration: "none", color: "inherit", fontWeight: 'bold', fontFamily: 'inherit' }}
+            sx={{
+              textDecoration: "none",
+              color: "inherit",
+              fontWeight: "bold",
+              fontFamily: "inherit",
+            }}
           >
             Pet App
           </Typography>
         </Box>
-        <Divider sx={{ mb: 2, backgroundColor: '#d4a373' }} />
+        <Divider sx={{ mb: 2, backgroundColor: "#d4a373" }} />
         <List className={geistSans.variable}>
-          <ListItem component={Link} button="true" href="/cats" onClick={toggleDrawer}>
+          <ListItem
+            component={Link}
+            button="true"
+            href="/cats"
+            onClick={toggleDrawer}
+          >
             <HomeIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText
               primary="Home"
-              primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
+              primaryTypographyProps={{
+                fontSize: "1.2rem",
+                fontFamily: "inherit",
+                color: "#6b4226",
+              }}
             />
           </ListItem>
           {/* <ListItem component={Link} button="true" href="/cats" onClick={toggleDrawer}>
@@ -119,18 +137,36 @@ const Sidebar = () => {
               primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
             />
           </ListItem> */}
-          <ListItem component={Link} button="true" href="/cats/list" onClick={toggleDrawer}>
+          <ListItem
+            component={Link}
+            button="true"
+            href="/cats/list"
+            onClick={toggleDrawer}
+          >
             <PetsIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText
               primary="List of Cats"
-              primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
+              primaryTypographyProps={{
+                fontSize: "1.2rem",
+                fontFamily: "inherit",
+                color: "#6b4226",
+              }}
             />
           </ListItem>
-          <ListItem component={Link} button="true" href="/cats/add" onClick={toggleDrawer}>
+          <ListItem
+            component={Link}
+            button="true"
+            href="/cats/add"
+            onClick={toggleDrawer}
+          >
             <NoteAddIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText
               primary="Add a Cat"
-              primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
+              primaryTypographyProps={{
+                fontSize: "1.2rem",
+                fontFamily: "inherit",
+                color: "#6b4226",
+              }}
             />
           </ListItem>
           {/* <ListItem component={Link} button="true" href="/cats/view" onClick={toggleDrawer}>
@@ -140,21 +176,39 @@ const Sidebar = () => {
               primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
             />
           </ListItem> */}
-          <ListItem component={Link} button="true" href="/journal/list" onClick={toggleDrawer}>
+          <ListItem
+            component={Link}
+            button="true"
+            href="/journal/overview"
+            onClick={toggleDrawer}
+          >
             <NoteAddIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText
               primary="List of Journal Entries"
-              primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
+              primaryTypographyProps={{
+                fontSize: "1.2rem",
+                fontFamily: "inherit",
+                color: "#6b4226",
+              }}
             />
           </ListItem>
-          <ListItem component={Link} button="true" href="/journal/add" onClick={toggleDrawer}>
+          <ListItem
+            component={Link}
+            button="true"
+            href="/journal/add"
+            onClick={toggleDrawer}
+          >
             <NoteAddIcon sx={{ mr: 2, color: "#6b4226" }} />
             <ListItemText
               primary="Add a Journal Entry"
-              primaryTypographyProps={{ fontSize: '1.2rem', fontFamily: 'inherit', color: '#6b4226' }}
+              primaryTypographyProps={{
+                fontSize: "1.2rem",
+                fontFamily: "inherit",
+                color: "#6b4226",
+              }}
             />
           </ListItem>
-          <Divider sx={{ mt: 2, mb: 2, backgroundColor: '#d4a373' }} />
+          <Divider sx={{ mt: 2, mb: 2, backgroundColor: "#d4a373" }} />
           <ListItem>
             <LogOutButton />
           </ListItem>
