@@ -5,14 +5,16 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     // Step 1: Get the current time in UTC
-    const nowUTC = new Date(new Date().toISOString()); // Convert to UTC Date object
+    const nowUTC = new Date();
+    const fiveMinutesAgo = new Date(nowUTC.getTime() - 5 * 60 * 1000); // Add a buffer of 5 minutes
 
     // Step 2: Query the database for reminders that are due
     // Fetch reminders that are due up to the current time in UTC and have not been marked as read
     const dueReminders = await prisma.notification.findMany({
       where: {
         reminderTime: {
-          lte: nowUTC, // Ensure both `now` and `reminderTime` are in UTC
+          gte: fiveMinutesAgo, // Include reminders due within the last 5 minutes
+          lte: nowUTC, // And due up to the current time
         },
         isRead: false, // Only those that have not been processed
       },
@@ -62,6 +64,21 @@ export async function GET() {
             });
 
             console.log(`Successfully sent reminder to user ${user.uid}`);
+
+            // Broadcast the notification to clients
+            self.clients
+              .matchAll({ type: "window", includeUncontrolled: true })
+              .then(function (clients) {
+                clients.forEach(function (client) {
+                  const broadcastPayload = {
+                    notification: {
+                      title: reminder.title,
+                      body: reminder.message,
+                    }
+                  };
+                  client.postMessage(broadcastPayload);
+                });
+              });
           } catch (error) {
             console.error(`Error sending reminder to user ${user.uid}:`, error);
 

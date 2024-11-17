@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import Link from "next/link";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebaseClient";
 
 const SignUp = () => {
   const [email, setEmail] = useState(""); // User email
@@ -11,6 +14,14 @@ const SignUp = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false); // Show/hide password
   const [error, setError] = useState(null); // Print out the error --> Password doesn't satisfy some constraints
   const router = useRouter();
+  const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) {
+      router.push("/cats");
+    }
+    console.log(user);
+  }, [user]);
 
   // Define password criteria as an array of tuples
   const passwordCriteria = [
@@ -19,7 +30,7 @@ const SignUp = () => {
     [/[a-z]/.test(password), "At least one lowercase letter"],
     [/\d/.test(password), "At least one number"],
     [
-      /[!@#$%^&*]/.test(password),
+      /[!@#$%^&*?. ]/.test(password),
       "At least one special character (e.g., @, $, !, %, *, ?)",
     ],
   ];
@@ -50,7 +61,7 @@ const SignUp = () => {
         setPassword("");
 
         // Redirect to the home page
-        router.push("/");
+        router.push("/cats");
       }
     } catch (err) {
       console.error("Sign up error:", err);
@@ -73,7 +84,7 @@ const SignUp = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add user to the database");
+        console.error("Failed to add user to the database");
       }
 
       console.log("User added to database successfully");
@@ -135,7 +146,7 @@ const SignUp = () => {
                 key={index}
                 className={isValid ? "text-green-600" : "text-red-600"}
               >
-                - {message}
+                {!isValid ? message : ""}
               </li>
             ))}
           </ul>
@@ -149,6 +160,14 @@ const SignUp = () => {
         >
           Sign Up
         </button>
+
+        {/* Link to Log In page if they have an account */}
+        <p className="mt-4 text-black text-lg">
+          Already have an account?{' '}
+          <Link href="/authentication/log-in" className="text-indigo-500 hover:underline">
+            Log In
+          </Link>
+        </p>
       </form>
     </div>
   );

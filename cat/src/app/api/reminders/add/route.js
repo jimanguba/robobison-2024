@@ -22,6 +22,7 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+    const reminderTimeUTC = new Date(parsedReminderTime.toISOString());
 
     // Check if the user exists
     const user = await prisma.user.findUnique({
@@ -41,7 +42,7 @@ export async function POST(req) {
         title: title,
         message: message,
         isRead: false,
-        reminderTime: parsedReminderTime, // Ensure reminderTime is a Date object
+        reminderTime: reminderTimeUTC, // Ensure reminderTime is a Date object in UTC
       },
     });
 

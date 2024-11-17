@@ -1,0 +1,13 @@
+/* styles.css */
+.x-axis path {
+  stroke: none; /* Hide the X-axis line */
+}
+
+.x-axis text {
+  font-size: 25px; /* Increase font size for X-axis labels */
+  transform: translateY(10px);
+}
+
+.x-axis .tick line {
+  display: none; /* Hides the tick marks */
+}
