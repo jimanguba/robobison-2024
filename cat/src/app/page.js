@@ -125,8 +125,14 @@ export default function Home() {
           className="font-readyforfall text-7xl text-center text-fontColMain"
           style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
         >
-          Sign Up
+          Cat Journal
         </h1>
+        <h2
+          className="font-readyforfall text-5xl text-center text-fontColMain"
+          style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
+        >
+          CATJ
+        </h2>
       </div>
     </div>
   );
