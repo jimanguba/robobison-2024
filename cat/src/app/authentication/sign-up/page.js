@@ -172,7 +172,7 @@ const SignUp = () => {
             </button>
 
             {/* Link to Log In page if they have an account */}
-            <p className="mt-4 text-black text-lg">
+            <p className="mt-4 text-sm font-readyforfall text-fontColMain">
               Already have an account?{" "}
               <Link
                 href="/authentication/log-in"

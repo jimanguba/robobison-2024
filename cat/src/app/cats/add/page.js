@@ -6,6 +6,7 @@ import { Box, Typography, TextField, Button } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import localFont from "next/font/local";
 import { auth } from "@/lib/firebaseClient";
+import { Background } from "@/app/page";
 
 const geistSans = localFont({
   src: "../../fonts/GeistVF.woff",
@@ -45,7 +46,7 @@ const AddCat = () => {
           name,
           breed,
           birthday: birthday ? new Date(birthday) : null,
-          ownerUid
+          ownerUid,
         }),
       });
 
@@ -62,67 +63,104 @@ const AddCat = () => {
   };
 
   return (
-    <Box sx={{ padding: 4 }} className={geistSans.variable}>
-      {/* Header Section */}
-      <Box sx={{ textAlign: "center", mb: 4 }}>
-        <Typography variant="h3" sx={{ fontWeight: "bold", color: "#6b4226" }}>
-          Add a New Cat
-        </Typography>
-        <Typography variant="h6" sx={{ color: "#8b6f47", mt: 1 }}>
-          Fill in the details below to add your new feline friend.
-        </Typography>
-      </Box>
+    <Box
+      sx={{
+        position: "relative",
+        height: "100vh",
+        display: "flex", // Flexbox for centering
+        justifyContent: "center", // Horizontal centering
+        alignItems: "center", // Vertical centering
+        overflow: "hidden",
+      }}
+    >
+      {/* Background Component */}
+      <div className="absolute inset-0 z-0">
+        <Background />
+      </div>
 
-      {/* Form Section */}
+      {/* Foreground Content */}
       <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ maxWidth: 600, margin: "0 auto" }}
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          padding: 4,
+          margin: "auto",
+          maxWidth: 800,
+          backgroundColor: "rgba(255, 255, 255, 0.8)", // Transparent white
+          borderRadius: 10, // Rounded corners
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)", // Optional shadow
+          backdropFilter: "blur(10px)", // Glassmorphism effect
+        }}
+        className={geistSans.variable}
       >
-        <TextField
-          fullWidth
-          label="Cat Name"
-          variant="outlined"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          sx={{ mb: 3, fontFamily: "inherit" }}
-        />
-        <TextField
-          fullWidth
-          label="Breed (Optional)"
-          variant="outlined"
-          value={breed}
-          onChange={(e) => setBreed(e.target.value)}
-          sx={{ mb: 3, fontFamily: "inherit" }}
-        />
-        <TextField
-          fullWidth
-          label="Birthday (Optional)"
-          variant="outlined"
-          value={birthday}
-          onChange={(e) => setBirthday(e.target.value)}
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          sx={{ mb: 3, fontFamily: "inherit" }}
-        />
-        {error && (
-          <Typography variant="body2" sx={{ color: "red", mb: 2 }}>
-            {error}
+        {/* Header Section */}
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: "bold",
+              color: "#794F2C",
+              fontFamily: "readyforfall",
+            }}
+          >
+            Add a New Cat
           </Typography>
-        )}
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{
-            backgroundColor: "#6b4226",
-            "&:hover": { backgroundColor: "#854c30" },
-            fontFamily: "inherit",
-            padding: "10px 20px",
-          }}
-          startIcon={<PetsIcon />}
+          <Typography variant="h6" sx={{ color: "#8b6f47", mt: 1 }}>
+            Fill in the details below to add your new feline friend.
+          </Typography>
+        </Box>
+
+        {/* Form Section */}
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ maxWidth: 600, margin: "0 auto" }}
         >
-          Add Cat
-        </Button>
+          <TextField
+            fullWidth
+            label="Cat Name"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            sx={{ mb: 3, fontFamily: "inherit" }}
+          />
+          <TextField
+            fullWidth
+            label="Breed (Optional)"
+            variant="outlined"
+            value={breed}
+            onChange={(e) => setBreed(e.target.value)}
+            sx={{ mb: 3, fontFamily: "inherit" }}
+          />
+          <TextField
+            fullWidth
+            label="Birthday (Optional)"
+            variant="outlined"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            sx={{ mb: 3, fontFamily: "inherit" }}
+          />
+          {error && (
+            <Typography variant="body2" sx={{ color: "red", mb: 2 }}>
+              {error}
+            </Typography>
+          )}
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "#6b4226",
+              "&:hover": { backgroundColor: "#854c30" },
+              fontFamily: "readyforfall",
+              padding: "10px 20px",
+            }}
+            startIcon={<PetsIcon />}
+          >
+            Add Cat
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

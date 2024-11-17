@@ -20,7 +20,11 @@ const LogOutButton = () => {
       });
   };
   return (
-    <Button onClick={handleSignOut} variant="text">
+    <Button
+      className="text-[#683bd3] font-bold uppercase hover:bg-[#d6c4b7] px-4 py-2 rounded transition-all duration-300"
+      onClick={handleSignOut}
+      variant="text"
+    >
       Log Out
     </Button>
   );
