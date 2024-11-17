@@ -8,6 +8,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Background, Cat } from "@/app/page"; // Import Background and Cat
+import Link from "next/link";
 
 const LogIn = () => {
   const [email, setEmail] = useState(""); // User email
@@ -41,7 +42,7 @@ const LogIn = () => {
       setError("Failed to save user information. Please try again.");
     }
   };
-  // Redirect to hompage if user already log in
+
   // Redirect to homepage if user is already logged in
   useEffect(() => {
     if (user) {
@@ -73,13 +74,11 @@ const LogIn = () => {
 
   return (
     <div className="flex h-screen bg-[#F6E9E0] relative">
-      {/* Background */}
       <div className="absolute inset-0 z-0">
         <Background />
       </div>
 
       <div className="flex items-center justify-center w-1/2">
-        {/* Cat Component */}
         <Cat mood={3} />
       </div>
 
@@ -141,6 +140,16 @@ const LogIn = () => {
             >
               Log In
             </button>
+
+            <p className="mt-4 text-sm font-readyforfall text-fontColMain">
+              Don't have an account?{" "}
+              <Link
+                href="/authentication/sign-up"
+                className="text-indigo-500 hover:underline"
+              >
+                Sign-up
+              </Link>
+            </p>
           </form>
         </div>
       </div>
