@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Slider, Box, TextField } from "@mui/material";
+import { Slider, Button, TextField } from "@mui/material";
 import { Background, Cat } from "@/app/page";
+import PetsIcon from "@mui/icons-material/Pets";
+import { useRouter } from "next/navigation";
 
 export default function MoodCard() {
   const [moodIntensity, setMoodIntensity] = useState(3);
   const [longAnswer, setLongAnswer] = useState("");
+  const router = useRouter();
 
   const handleChange = (event) => {
     setLongAnswer(event.target.value);
@@ -26,8 +29,8 @@ export default function MoodCard() {
       </div>
 
       {/* Input thing */}
-      <div className="flex items-center justify-center w-1/2">
-        <div className="absolute bg-[#EEDFD5] w-[50%] p-8 rounded-xl shadow-lg">
+      <div className="flex items-center justify-center items-center  w-1/2">
+        <div className="absolute bg-[#EEDFD5] w-[50%] h-[85%] p-8 rounded-xl shadow-lg">
           <h1
             className="text-fontColMain font-readyforfall text-5xl text-center mb-14"
             style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
@@ -142,6 +145,30 @@ export default function MoodCard() {
               },
             }}
           />
+
+          {/* Submit Button */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#6b4226",
+                "&:hover": { backgroundColor: "#854c30" },
+                fontFamily: "readyforfall",
+                padding: "10px 20px",
+              }}
+              startIcon={<PetsIcon />}
+              onClick={() => router.push("/")}
+            >
+              Add Cat
+            </Button>
+          </div>
         </div>
       </div>
     </div>
