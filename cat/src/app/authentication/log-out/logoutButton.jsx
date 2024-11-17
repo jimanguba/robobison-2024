@@ -8,10 +8,12 @@ import { Button } from "@mui/material";
 import { signOut } from "firebase/auth";
 
 const LogOutButton = () => {
+  const router = useRouter();
   const handleSignOut = async () => {
     await signOut(auth)
       .then(() => {
         console.log("User signed out successfully.");
+        router.push("/");
       })
       .catch((error) => {
         console.error("Error signing out:", error);

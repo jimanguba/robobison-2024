@@ -33,20 +33,3 @@ body {
   font-weight: normal;
   font-style: normal;
 }
-
-.landing-page-title {
-  font-family: "GoMocha", sans-serif; /* Fallback to sans-serif */
-  font-size: 4rem; /* Adjust the size as needed */
-  text-align: center; /* Center the text */
-  margin-top: 10px; /* Space between the image and the title */
-  color: #794f2c; /* Change to your desired color */
-}
-
-.landing-page-message {
-  font-family: "ReadyForFall", sans-serif; /* Fallback to sans-serif */
-  font-size: 1.5rem; /* Adjust the size as needed */
-  text-align: center; /* Center the text */
-  margin-top: 45px; /* Space between the image and the title */
-  margin-bottom: 20px;
-  color: #794f2c; /* Change to your desired color */
-}
