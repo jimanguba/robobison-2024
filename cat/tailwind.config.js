@@ -12,6 +12,7 @@ module.exports = {
         background: "var(--foreground)",
         foreground: "var(--foreground)",
         baseBackground: "#F6E9E0",
+        fontColMain: "#794F2C",
       },
       keyframes: {
         wiggle: {
@@ -30,6 +31,10 @@ module.exports = {
         shake3: "shake 0.8s ease-in-out infinite",
         shake4: "shake 1.2s ease-in-out infinite",
         shake5: "shake 1.5s ease-in-out infinite",
+      },
+      fontFamily: {
+        gomocha: ["GoMocha", "sans-serif"],
+        readyforfall: ["ReadyForFall", "sans-serif"],
       },
     },
   },

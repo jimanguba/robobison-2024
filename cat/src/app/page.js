@@ -107,16 +107,20 @@ export default function Home() {
     <div className="relative z-10">
       <Background />
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen">
-        <h2 className="absolute text-black z-20 -top-10 -left-10 rotate-[-5deg] text-center">
-          meow!
-        </h2>
-        <button
-          className="transition-transform duration-500 transform hover:scale-105"
-          onClick={() => router.push("/authentication/sign-up")}
-        >
-          <Cat mood={3} />
-        </button>
-        <h1 className="landing-page-title">CAT JOURNAL</h1>
+        <div className="relative">
+          <h2 className="font-readyforfall absolute text-fontColMain z-20 -top-0 -left-0 rotate-[-25deg] text-center">
+            meow!
+          </h2>
+          <button
+            className="transition-transform duration-500 transform hover:scale-105"
+            onClick={() => router.push("/authentication/sign-up")}
+          >
+            <Cat mood={3} />
+          </button>
+        </div>
+        <h1 className="font-gomocha text-7xl text-center text-fontColMain">
+          CAT JOURNAL
+        </h1>
       </div>
     </div>
   );
