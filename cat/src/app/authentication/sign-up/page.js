@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import Link from "next/link";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebaseClient";
 
 const SignUp = () => {
   const [email, setEmail] = useState(""); // User email
@@ -11,6 +14,14 @@ const SignUp = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false); // Show/hide password
   const [error, setError] = useState(null); // Print out the error --> Password doesn't satisfy some constraints
   const router = useRouter();
+  const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) {
+      router.push("/cats");
+    }
+    console.log(user);
+  }, [user]);
 
   // Define password criteria as an array of tuples
   const passwordCriteria = [
@@ -149,6 +160,14 @@ const SignUp = () => {
         >
           Sign Up
         </button>
+
+        {/* Link to Log In page if they have an account */}
+        <p className="mt-4 text-black text-lg">
+          Already have an account?{' '}
+          <Link href="/authentication/log-in" className="text-indigo-500 hover:underline">
+            Log In
+          </Link>
+        </p>
       </form>
     </div>
   );
