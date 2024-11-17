@@ -20,7 +20,7 @@ const LogIn = () => {
   // Redirect to homepage if user is already logged in
   useEffect(() => {
     if (user) {
-      router.push("/");
+      router.push("/cats");
     }
   }, [user]);
 

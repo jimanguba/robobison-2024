@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import Link from "next/link";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebaseClient";
 
 import { Background, Cat } from "@/app/page"; // Import the Cat component
 
@@ -13,7 +16,16 @@ const SignUp = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const [user] = useAuthState(auth);
 
+  useEffect(() => {
+    if (user) {
+      router.push("/cats");
+    }
+    console.log(user);
+  }, [user]);
+
+  // Define password criteria as an array of tuples
   const passwordCriteria = [
     [password.length >= 8, "At least 8 characters"],
     [/[A-Z]/.test(password), "At least one uppercase letter"],
@@ -43,7 +55,9 @@ const SignUp = () => {
         await addUserToDatabase(user);
         setEmail("");
         setPassword("");
-        router.push("/");
+
+        // Redirect to the home page
+        router.push("/cats");
       }
     } catch (err) {
       console.error("Sign up error:", err);
@@ -156,6 +170,17 @@ const SignUp = () => {
             >
               Sign Up
             </button>
+
+            {/* Link to Log In page if they have an account */}
+            <p className="mt-4 text-black text-lg">
+              Already have an account?{" "}
+              <Link
+                href="/authentication/log-in"
+                className="text-indigo-500 hover:underline"
+              >
+                Log In
+              </Link>
+            </p>
           </form>
         </div>
       </div>
