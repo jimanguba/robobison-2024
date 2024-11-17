@@ -62,7 +62,7 @@ export function Cat({ mood }) {
   );
 }
 
-function Background() {
+export function Background() {
   return (
     <div className="bg-baseBackground bg-cover min-h-screen absolute inset-0 z-0">
       <Image
@@ -108,8 +108,11 @@ export default function Home() {
       <Background />
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen">
         <div className="relative">
-          <h2 className="font-readyforfall absolute text-fontColMain z-20 -top-0 -left-0 rotate-[-25deg] text-center">
-            meow!
+          <h2 className="font-readyforfall absolute text-fontColMain opacity-60 z-20 -top-0 -left-0 rotate-[-25deg] text-center">
+            meow
+          </h2>
+          <h2 className="font-readyforfall absolute text-fontColMain opacity-60 z-20 -bottom-0 -right-20 rotate-[25deg] text-center">
+            meow
           </h2>
           <button
             className="transition-transform duration-500 transform hover:scale-105"
@@ -118,8 +121,11 @@ export default function Home() {
             <Cat mood={3} />
           </button>
         </div>
-        <h1 className="font-gomocha text-7xl text-center text-fontColMain">
-          CAT JOURNAL
+        <h1
+          className="font-readyforfall text-7xl text-center text-fontColMain"
+          style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
+        >
+          Sign Up
         </h1>
       </div>
     </div>
