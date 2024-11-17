@@ -12,4 +12,4 @@ if (!admin.apps.length) {
 }
 
 const messaging = admin.messaging();
-export { messaging };
+export { admin, messaging };

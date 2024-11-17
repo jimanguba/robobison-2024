@@ -84,7 +84,7 @@ const SignUp = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add user to the database");
+        console.error("Failed to add user to the database");
       }
 
       console.log("User added to database successfully");

@@ -32,6 +32,7 @@ export async function POST(req) {
       data: {
         uid: uid,
         createdAt: new Date(),
+        updatedAt: new Date(),
       },
     });
 
