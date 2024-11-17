@@ -19,6 +19,7 @@ import LogOutButton from "../authentication/log-out/logoutButton";
 import React, { useState, useEffect } from "react";
 
 import localFont from "next/font/local";
+import { FavoriteBorder } from "@mui/icons-material";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -82,7 +83,7 @@ const Sidebar = () => {
           [`& .MuiDrawer-paper`]: {
             width: 280,
             boxSizing: "border-box",
-            backgroundColor: "#f9f5f0",
+            backgroundColor: "#F9F4F0",
             padding: "20px",
             transition: "width 0.3s ease-in-out",
           },
@@ -97,19 +98,19 @@ const Sidebar = () => {
           }}
           className={geistSans.variable} // Applying the custom font
         >
-          <HomeIcon sx={{ mr: 1, color: "#8b6f47" }} />
+          <FavoriteBorder sx={{ mr: 1, color: "#794F2C" }} />
           <Typography
             variant="h5"
             component={Link}
             href="/"
             sx={{
               textDecoration: "none",
-              color: "inherit",
-              fontWeight: "bold",
-              fontFamily: "inherit",
+              color: "#794F2C",
+              fontWeight: "normal",
+              fontFamily: "readyforfall",
             }}
           >
-            Pet App
+            Cat Journal
           </Typography>
         </Box>
         <Divider sx={{ mb: 2, backgroundColor: "#d4a373" }} />
@@ -125,8 +126,9 @@ const Sidebar = () => {
               primary="Home"
               primaryTypographyProps={{
                 fontSize: "1.2rem",
-                fontFamily: "inherit",
-                color: "#6b4226",
+                fontWeight: "lighter",
+                fontFamily: "readyforfall",
+                color: "#794F2C",
               }}
             />
           </ListItem>
@@ -148,8 +150,8 @@ const Sidebar = () => {
               primary="List of Cats"
               primaryTypographyProps={{
                 fontSize: "1.2rem",
-                fontFamily: "inherit",
-                color: "#6b4226",
+                fontFamily: "readyforfall",
+                color: "#794F2C",
               }}
             />
           </ListItem>
@@ -164,8 +166,8 @@ const Sidebar = () => {
               primary="Add a Cat"
               primaryTypographyProps={{
                 fontSize: "1.2rem",
-                fontFamily: "inherit",
-                color: "#6b4226",
+                fontFamily: "readyforfall",
+                color: "#794F2C",
               }}
             />
           </ListItem>
@@ -187,8 +189,8 @@ const Sidebar = () => {
               primary="List of Journal Entries"
               primaryTypographyProps={{
                 fontSize: "1.2rem",
-                fontFamily: "inherit",
-                color: "#6b4226",
+                fontFamily: "readyforfall",
+                color: "#794F2C",
               }}
             />
           </ListItem>
@@ -203,8 +205,8 @@ const Sidebar = () => {
               primary="Add a Journal Entry"
               primaryTypographyProps={{
                 fontSize: "1.2rem",
-                fontFamily: "inherit",
-                color: "#6b4226",
+                fontFamily: "readyforfall",
+                color: "#794F2C",
               }}
             />
           </ListItem>
