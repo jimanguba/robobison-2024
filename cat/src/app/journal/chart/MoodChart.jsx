@@ -4,7 +4,7 @@ import "./styles.css";
 
 const MoodChart = ({
   data,
-  visibleNum = 5,
+  visibleNum = 10,
   width = 1000,
   height = 500,
   margin = { top: 60, right: 30, bottom: 50, left: 80 },
