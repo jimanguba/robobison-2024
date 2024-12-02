@@ -14,6 +14,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import localFont from "next/font/local";
 import { Background } from "@/app/page";
+import Image from "next/image";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -22,7 +23,7 @@ const geistSans = localFont({
 
 const CatsPage = () => {
   return (
-    <Box sx={{ position: "relative", height: "100vh", overflow: "hidden" }}>
+    <Box sx={{ position: "relative", height: "100%", overflow: "hidden" }}>
       {/* Background Component */}
       <div className="absolute inset-0 z-0">
         <Background />
@@ -103,38 +104,59 @@ const CatsPage = () => {
           >
             Featured Cats
           </Typography>
-          <Grid container spacing={4}>
-            {/* Example of a featured cat card */}
-            <Grid item xs={12} sm={6} md={4}>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image="/images/cat1.jpg" // Replace with your image path
-                  alt="Cat Name"
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{ fontFamily: "inherit", color: "#6b4226" }}
-                  >
-                    Cat Name
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ fontFamily: "inherit" }}
-                  >
-                    Brief description about the cat. This section can include
-                    details like breed, age, and personality traits.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            {/* Repeat the above Grid item for more featured cats */}
-          </Grid>
+          <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            <Card sx={{ width: 345 }}>
+              <CardMedia
+                component="img"
+                image="/jillian-cat.webp" // Replace with the actual path to the image
+                alt="Boba"
+                sx={{ height: "300px" }}
+              />
+              <CardContent>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  sx={{ fontFamily: "inherit", color: "#6b4226" }}
+                >
+                  Boba
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ fontFamily: "inherit" }}
+                >
+                  Jillian's cutest cat which looks like boba, named boba, just
+                  like a boba!
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card sx={{ width: 345 }}>
+              <CardMedia
+                component="img"
+                src="/kha-cat.webp" // Replace with the actual path to the image
+                alt="Nacho"
+                sx={{ height: "300px" }}
+              />
+              <CardContent>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  sx={{ fontFamily: "inherit", color: "#6b4226" }}
+                >
+                  Nacho
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ fontFamily: "inherit" }}
+                >
+                  She's fat.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
         </Box>
       </Box>
     </Box>

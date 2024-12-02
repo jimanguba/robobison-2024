@@ -181,7 +181,7 @@ const Sidebar = () => {
           <ListItem
             component={Link}
             button="true"
-            href="/journal/list"
+            href="/journal/overview"
             onClick={toggleDrawer}
           >
             <NoteAddIcon sx={{ mr: 2, color: "#6b4226" }} />

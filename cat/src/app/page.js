@@ -25,11 +25,11 @@ export function Cat({ mood }) {
   switch (mood) {
     case 1:
       catFace = catFace1;
-      catTailAnimation = "animate-shake1";
+      catTailAnimation = "animate-shake5";
       break;
     case 2:
       catFace = catFace2;
-      catTailAnimation = "animate-shake2";
+      catTailAnimation = "animate-shake4";
       break;
     case 3: //or put this to default whatever (neutral)
       catFace = catFace3;
@@ -37,11 +37,11 @@ export function Cat({ mood }) {
       break;
     case 4:
       catFace = catFace4;
-      catTailAnimation = "animate-shake4";
+      catTailAnimation = "animate-shake2";
       break;
     case 5:
       catFace = catFace5;
-      catTailAnimation = "animate-shake5";
+      catTailAnimation = "animate-shake1";
       break;
   }
 
