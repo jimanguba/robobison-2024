@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import JournalCard from "../JournalCard";
 import { Box, Typography, Button, Modal } from "@mui/material";
 import MoodChart from "../chart/MoodChart";
 import "./calendar.css";
 import dayjs from "dayjs";
 import { getEmotion } from "../data";
-
+import { chartData } from "../data";
 const JournalOverview = () => {
   const [viewType, setViewType] = useState("grid");
   const [date, setDate] = useState(new Date());
@@ -60,40 +59,6 @@ const JournalOverview = () => {
       generateCalendarOfMonth(date.getMonth(), date.getFullYear())
     );
   }, []);
-
-  const data = [
-    { label: "1", score: 1 },
-    { label: "2", score: 3 },
-    { label: "3", score: 1 },
-    { label: "4", score: 5 },
-    { label: "5", score: 4 },
-    { label: "6", score: 1 },
-    { label: "7", score: 4 },
-    { label: "8", score: 5 },
-    { label: "9", score: 3 },
-    { label: "10", score: 4 },
-    { label: "11", score: 3 },
-    { label: "12", score: 1 },
-    { label: "13", score: 1 },
-    { label: "14", score: 5 },
-    { label: "15", score: 4 },
-    { label: "16", score: 3 },
-    { label: "17", score: 1 },
-    { label: "18", score: 1 },
-    { label: "19", score: 2 },
-    { label: "20", score: 4 },
-    { label: "21", score: 5 },
-    { label: "22", score: 5 },
-    { label: "23", score: 4 },
-    { label: "24", score: 3 },
-    { label: "25", score: 5 },
-    { label: "26", score: 3 },
-    { label: "27", score: 5 },
-    { label: "28", score: 2 },
-    { label: "29", score: 2 },
-    { label: "30", score: 3 },
-    { label: "31", score: 3 },
-  ];
 
   const getMonthYear = (date) => {
     let monthYear =
@@ -169,7 +134,7 @@ const JournalOverview = () => {
           sx={{ justifyContent: "center", m: 4 }}
           className="flex items-center"
         >
-          <MoodChart data={data} width={1300} height={400}></MoodChart>
+          <MoodChart data={chartData} width={1300} height={400}></MoodChart>
         </Box>
       </Modal>
       <div className="calendar">
@@ -192,7 +157,7 @@ const JournalOverview = () => {
             {/* Print the emoji emotion */}
             {day ? (
               <div className="text-2xl">
-                {getEmotion(data[day.date() - 1].score)}
+                {getEmotion(chartData[day.date() - 1].score)}
               </div>
             ) : (
               ""
