@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { IconButton } from "@mui/material";
 import { LuRectangleHorizontal } from "react-icons/lu";
 import { FaRegCircle } from "react-icons/fa";
@@ -8,10 +6,7 @@ import { RxEraser } from "react-icons/rx";
 import { TfiHandDrag } from "react-icons/tfi";
 import { LuMousePointer } from "react-icons/lu";
 
-const DrawToolBar = ({ toolInUse, setToolInUse }) => {
-  // Keep the state of which tool we are choosing
-  //   const [toolInUse, setToolInUse] = useState(2);
-
+const DrawToolBar = ({ toolInUse, onToolChange }) => {
   return (
     <div className="flex bg-[#D4BEAF] border-[#F6B489] p-2 justify-around rounded-sm">
       <IconButton
@@ -25,7 +20,7 @@ const DrawToolBar = ({ toolInUse, setToolInUse }) => {
               }
             : {}
         }
-        onClick={() => setToolInUse(1)}
+        onClick={() => onToolChange(1)}
       >
         <TfiHandDrag size={40} />
       </IconButton>
@@ -41,7 +36,7 @@ const DrawToolBar = ({ toolInUse, setToolInUse }) => {
               }
             : {}
         }
-        onClick={() => setToolInUse(2)}
+        onClick={() => onToolChange(2)}
       >
         <LuMousePointer size={40} />
       </IconButton>
@@ -57,7 +52,7 @@ const DrawToolBar = ({ toolInUse, setToolInUse }) => {
               }
             : {}
         }
-        onClick={() => setToolInUse(3)}
+        onClick={() => onToolChange(3)}
       >
         <LuRectangleHorizontal size={50} />
       </IconButton>
@@ -73,7 +68,7 @@ const DrawToolBar = ({ toolInUse, setToolInUse }) => {
               }
             : {}
         }
-        onClick={() => setToolInUse(4)}
+        onClick={() => onToolChange(4)}
       >
         <FaRegCircle size={40} />
       </IconButton>
@@ -89,7 +84,7 @@ const DrawToolBar = ({ toolInUse, setToolInUse }) => {
               }
             : {}
         }
-        onClick={() => setToolInUse(5)}
+        onClick={() => onToolChange(5)}
       >
         <GoPencil size={35} />
       </IconButton>
@@ -105,7 +100,7 @@ const DrawToolBar = ({ toolInUse, setToolInUse }) => {
               }
             : {}
         }
-        onClick={() => setToolInUse(6)}
+        onClick={() => onToolChange(6)}
       >
         <RxEraser size={40} />
       </IconButton>
