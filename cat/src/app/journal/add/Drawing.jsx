@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Canvas, Rect, Circle } from "fabric";
 import DrawToolBar from "./DrawToolBar";
 import "./drawing.css";
+import Settings from "./Settings";
 
 export const Drawing = () => {
   const canvasRef = useRef(null);
@@ -32,7 +33,7 @@ export const Drawing = () => {
       const rect = new Rect({
         left: 100,
         top: 100,
-        fill: "red",
+        fill: "#FF0000",
         width: 20,
         height: 20,
       });
@@ -47,7 +48,7 @@ export const Drawing = () => {
       const circle = new Circle({
         left: 100,
         top: 100,
-        fill: "red",
+        fill: "#FF0000",
         radius: 20,
       });
 
@@ -77,6 +78,7 @@ export const Drawing = () => {
       {/* Display the toolbar */}
       <DrawToolBar toolInUse={toolInUse} onToolChange={onToolChange} />
       <canvas id="canvas" ref={canvasRef} />
+      <Settings canvas={canvas} />
     </div>
   );
 };
