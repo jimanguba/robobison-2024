@@ -129,7 +129,7 @@ const JournalOverview = () => {
       </Box>
 
       {/* Chart */}
-      <Modal open={chartModalOpen} onClose={() => setChartModalOpen(false)}>
+      <Modal open={chartModalOpen} onClose={() => setChartModalOpen(false)} sx={{ backdropFilter: "blur(15px)" }}>
         <Box
           sx={{ justifyContent: "center", m: 4 }}
           className="flex items-center"
