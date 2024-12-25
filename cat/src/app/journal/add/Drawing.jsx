@@ -18,9 +18,9 @@ export const Drawing = () => {
       const initCanvas = new Canvas(canvasRef.current, {
         height: 500,
         widtbh: 500,
+        backgroundColor: null,
       });
 
-      initCanvas.backgroundColor = "#fff";
       initCanvas.renderAll();
 
       setCanvas(initCanvas);

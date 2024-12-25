@@ -31,7 +31,7 @@ export default function MoodCard() {
       </div>
 
       {/* Input thing */}
-      <div className="flex items-center justify-center items-center  w-1/2">
+      <div className="flex items-center justify-center items-center  w-full">
         <div className="absolute bg-[#EEDFD5] w-[50%] h-[85%] p-8 rounded-xl shadow-lg">
           <h1
             className="text-fontColMain font-readyforfall text-5xl text-center mb-14"
@@ -173,7 +173,7 @@ export default function MoodCard() {
           </div>
         </div>
       </div>
-      <div className="flex bg-red-100 justify-contennt-center w-[1000px] h-[1000px]">
+      <div className=" absolute">
         <Drawing />
       </div>
     </div>
