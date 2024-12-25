@@ -8,7 +8,7 @@ import { LuMousePointer } from "react-icons/lu";
 
 const DrawToolBar = ({ toolInUse, onToolChange }) => {
   return (
-    <div className="flex bg-[#D4BEAF] border-[#F6B489] p-2 justify-around rounded-sm">
+    <div className="flex bg-[#D4BEAF] border-[#F6B489] p-1 w-[60%] justify-around rounded-sm">
       <IconButton
         sx={
           toolInUse == 1
@@ -22,7 +22,7 @@ const DrawToolBar = ({ toolInUse, onToolChange }) => {
         }
         onClick={() => onToolChange(1)}
       >
-        <TfiHandDrag size={40} />
+        <TfiHandDrag size={30} />
       </IconButton>
 
       <IconButton
@@ -38,7 +38,7 @@ const DrawToolBar = ({ toolInUse, onToolChange }) => {
         }
         onClick={() => onToolChange(2)}
       >
-        <LuMousePointer size={40} />
+        <LuMousePointer size={30} />
       </IconButton>
 
       <IconButton
@@ -54,7 +54,7 @@ const DrawToolBar = ({ toolInUse, onToolChange }) => {
         }
         onClick={() => onToolChange(3)}
       >
-        <LuRectangleHorizontal size={50} />
+        <LuRectangleHorizontal size={40} />
       </IconButton>
 
       <IconButton
@@ -70,7 +70,7 @@ const DrawToolBar = ({ toolInUse, onToolChange }) => {
         }
         onClick={() => onToolChange(4)}
       >
-        <FaRegCircle size={40} />
+        <FaRegCircle size={30} />
       </IconButton>
 
       <IconButton
@@ -86,7 +86,7 @@ const DrawToolBar = ({ toolInUse, onToolChange }) => {
         }
         onClick={() => onToolChange(5)}
       >
-        <GoPencil size={35} />
+        <GoPencil size={25} />
       </IconButton>
 
       <IconButton
@@ -102,7 +102,7 @@ const DrawToolBar = ({ toolInUse, onToolChange }) => {
         }
         onClick={() => onToolChange(6)}
       >
-        <RxEraser size={40} />
+        <RxEraser size={30} />
       </IconButton>
     </div>
   );

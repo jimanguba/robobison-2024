@@ -42,7 +42,7 @@ const Settings = ({ canvas }) => {
   };
 
   return (
-    <div className="bg-red-100">
+    <div>
       {selectedObjects.length > 0 && (
         <div>
           <p>Selected Objects: {selectedObjects.length}</p>

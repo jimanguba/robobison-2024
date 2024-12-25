@@ -6,7 +6,7 @@ import DrawToolBar from "./DrawToolBar";
 import "./drawing.css";
 import Settings from "./Settings";
 
-export const Drawing = () => {
+export const Drawing = ({ canvasWidth, canvasHeight }) => {
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
 
@@ -16,14 +16,18 @@ export const Drawing = () => {
   useEffect(() => {
     if (canvasRef.current) {
       const initCanvas = new Canvas(canvasRef.current, {
-        height: 500,
-        widtbh: 500,
+        height: canvasHeight || 500,
+        width: canvasWidth || 500,
         backgroundColor: null,
       });
 
       initCanvas.renderAll();
 
       setCanvas(initCanvas);
+
+      return () => {
+        initCanvas.dispose();
+      };
     }
   }, []);
 
@@ -74,10 +78,15 @@ export const Drawing = () => {
   };
 
   return (
-    <div>
+    <div className="flex-col items-center h-screen w-[100%]">
       {/* Display the toolbar */}
-      <DrawToolBar toolInUse={toolInUse} onToolChange={onToolChange} />
+      <div className="flex mb-2">
+        <div className="w-[20%]"></div>
+        <DrawToolBar toolInUse={toolInUse} onToolChange={onToolChange} />
+        <div className="w-[20%]"></div>
+      </div>
       <canvas id="canvas" ref={canvasRef} />
+
       <Settings canvas={canvas} />
     </div>
   );
