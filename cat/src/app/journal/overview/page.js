@@ -123,9 +123,7 @@ const JournalOverview = () => {
         {/* Button to let user see the chart */}
         <Button
           variant="outlined"
-          onClick={() => {
-            handleOpen;
-          }}
+          onClick={handleOpen}
           sx={{
             fontSize: "1rem", // Custom font size
             height: "20px",
