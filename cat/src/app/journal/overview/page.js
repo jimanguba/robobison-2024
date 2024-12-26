@@ -68,8 +68,15 @@ const JournalOverview = () => {
     return monthYear;
   };
 
+  const handleOpen = () => {
+    setChartModalOpen(true);
+  };
+  const handleClose = () => {
+    setChartModalOpen(false);
+  };
+
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 4 }}>
       <Box
         sx={{
           display: "flex",
@@ -117,7 +124,7 @@ const JournalOverview = () => {
         <Button
           variant="outlined"
           onClick={() => {
-            setChartModalOpen(true);
+            handleOpen;
           }}
           sx={{
             fontSize: "1rem", // Custom font size
@@ -129,7 +136,11 @@ const JournalOverview = () => {
       </Box>
 
       {/* Chart */}
-      <Modal open={chartModalOpen} onClose={() => setChartModalOpen(false)} sx={{ backdropFilter: "blur(15px)" }}>
+      <Modal
+        open={chartModalOpen}
+        onClose={handleClose}
+        sx={{ backdropFilter: "blur(15px)" }}
+      >
         <Box
           sx={{ justifyContent: "center", m: 4 }}
           className="flex items-center"
@@ -162,6 +173,7 @@ const JournalOverview = () => {
             ) : (
               ""
             )}
+            <Button onClick={handleOpen}>View Journal</Button>
           </div>
         ))}
       </div>
