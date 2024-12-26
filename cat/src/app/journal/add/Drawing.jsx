@@ -23,6 +23,10 @@ export const Drawing = () => {
       initCanvas.renderAll();
 
       setCanvas(initCanvas);
+
+      return () => {
+        initCanvas.dispose();
+      };
     }
   }, []);
 
