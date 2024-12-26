@@ -160,9 +160,10 @@ const JournalOverview = () => {
         ))}
 
         {calendarMonth.map((day, index) => (
-          <div
+          <Button
             className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
             key={index}
+            onClick={handleOpen}
           >
             {day ? day.date() : ""}
             {/* Print the emoji emotion */}
@@ -173,8 +174,7 @@ const JournalOverview = () => {
             ) : (
               ""
             )}
-            <Button onClick={handleOpen}>View Journal</Button>
-          </div>
+          </Button>
         ))}
       </div>
     </Box>
