@@ -1,0 +1,10 @@
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day {
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
