@@ -6,7 +6,8 @@ import MoodChart from "../chart/MoodChart";
 import "./calendar.css";
 import dayjs from "dayjs";
 import { getEmotion } from "../data";
-import { chartData } from "../data";
+import { chartData, activityData } from "../data";
+import ActivityChart from "../activityChart/ActivityChart";
 const JournalOverview = () => {
   const [viewType, setViewType] = useState("grid");
   const [date, setDate] = useState(new Date());
@@ -129,12 +130,31 @@ const JournalOverview = () => {
       </Box>
 
       {/* Chart */}
-      <Modal open={chartModalOpen} onClose={() => setChartModalOpen(false)} sx={{ backdropFilter: "blur(15px)" }}>
+      {/* <Modal open={chartModalOpen} onClose={() => setChartModalOpen(false)} sx={{ backdropFilter: "blur(15px)" }}>
         <Box
           sx={{ justifyContent: "center", m: 4 }}
           className="flex items-center"
         >
           <MoodChart data={chartData} width={1300} height={400}></MoodChart>
+        </Box>
+      </Modal> */}
+
+      {/* For debug */}
+      <Modal
+        open={chartModalOpen}
+        onClose={() => setChartModalOpen(false)}
+        sx={{ backdropFilter: "blur(15px)" }}
+      >
+        <Box
+          sx={{ justifyContent: "center", m: 4 }}
+          className="flex items-center"
+        >
+          <ActivityChart
+            data={activityData}
+            width={1300}
+            height={500}
+            visibleNum={7}
+          ></ActivityChart>
         </Box>
       </Modal>
       <div className="calendar">

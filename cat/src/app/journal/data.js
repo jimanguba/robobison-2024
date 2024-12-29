@@ -40,3 +40,14 @@ export const chartData = [
   { label: "30", score: 3 },
   { label: "31", score: 3 },
 ];
+
+// Toy activity data
+export const activityData = [
+  { label: "Play With Toy", score: 10 },
+  { label: "Play Hide And Seek", score: 23 },
+  { label: "Play Tag Or Fetch", score: 11 },
+  { label: "Brush The Cat", score: 35 },
+  { label: "Watch Tv", score: 25 },
+  { label: "Feed Treats", score: 11 },
+  { label: "Take A Nap", score: 1 },
+];
