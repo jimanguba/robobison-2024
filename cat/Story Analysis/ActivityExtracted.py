@@ -1,7 +1,19 @@
 import RoBERTa
 import ClusterText
-import re
 
+# Official activities topics
+officialActivites = [
+    "Play With Toy",
+    "Play Hide And Seek",
+    "Play Tag Or Fetch",
+    "Brush The Cat",
+    "Watch Tv",
+    "Feed Treats",
+    "Take A Nap"
+]
+
+text = "This morning, I woke up to my cat, Luna, gently nudging my hand with her nose. After stretching, she followed me to the kitchen, where I made coffee and fed her breakfast. She purred contentedly as she enjoyed her meal. Later, while I worked on my laptop, Luna perched on the windowsill, watching birds with keen interest. In the afternoon, we played with her favorite feather toy, her agile leaps making me laugh. As the sun set, Luna curled up beside me on the couch, her warmth a comforting presence. It was a simple, peaceful day, shared with my furry friend."
+    
 # Given a list of sentences, group them into paragraphs
 def groupIntoText(sentences):
     text = ""
@@ -15,38 +27,13 @@ def compressSemanticResult(semantic_result):
     
     return result
 
-# Function to formalize activity names
-def getOfficialActivities(activities):
-    officialActivities = []
-    
-    for activity in activities:
-        # Lowercase for consistent processing
-        activity = activity.lower()
-        
-        # Define simplifications
-        activity = re.sub(r"interactive play with.*toys", "Play with Toy", activity)
-        activity = re.sub(r"playing hide and seek", "Play Hide and Seek", activity)
-        activity = re.sub(r"playing tag or fetch games", "Play Tag or Fetch", activity)
-        activity = re.sub(r"brushing or grooming the cat", "Brush the Cat", activity)
-        activity = re.sub(r"enjoy television or screens.*", "Watch TV", activity)
-        activity = re.sub(r"feeding the treats", "Feed Treats", activity)
-        activity = re.sub(r"taking a nap with the cat", "Take a Nap", activity)
-
-        # Capitalize the first letter of each word
-        activity = activity.title()
-        
-        officialActivities.append(activity)
-    
-    return officialActivities
-
-
 # Extract activities from text and return the mood of owner during the activities
 def extractActivity(text):
     
     # Cluster activities into topics of activites
     grouped_activities = ClusterText.clusterText(text)
     activites_joyness = {}
-    
+
     for activity in grouped_activities.keys():
         # we only care the activities that have at least 1 sentence      
         if len(grouped_activities[activity]) > 0:
@@ -54,6 +41,11 @@ def extractActivity(text):
             paragraphs = groupIntoText(grouped_activities[activity])
             
             # Extract the mood of owner during the activities
-            activites_joyness[getOfficialActivities([activity])[0]] = compressSemanticResult(RoBERTa.polarity_scores_roberta(paragraphs))
+            officialTopic = ClusterText.clusterText(activity, topics=officialActivites.copy(), definedThreshold=-1)
+            officialTopic = next((key for key, value in officialTopic.items() if len(value) > 0), None)
+ 
+            activites_joyness[officialTopic] = compressSemanticResult(RoBERTa.polarity_scores_roberta(paragraphs))
         
     return activites_joyness
+
+extractActivity(text)
