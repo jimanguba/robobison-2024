@@ -1,11 +1,6 @@
 from sentence_transformers import SentenceTransformer, util
 import nltk
 
-# Input text
-text = """
-This morning, I woke up to my cat, Luna, gently nudging my hand with her nose. After stretching, she followed me to the kitchen, where I made coffee and fed her breakfast. She purred contentedly as she enjoyed her meal. Later, while I worked on my laptop, Luna perched on the windowsill, watching birds with keen interest. In the afternoon, we played with her favorite feather toy, her agile leaps making me laugh. As the sun set, Luna curled up beside me on the couch, her warmth a comforting presence. It was a simple, peaceful day, shared with my furry friend.
-"""
-
 # Predefined activity topics
 activities = ["Interactive play with feather toys", 
  "Playing hide and seek", 
@@ -55,4 +50,3 @@ def clusterText(text):
     # Return dictionary of grouped sentences
     return grouped_sentences
     
-print(clusterText(text))
