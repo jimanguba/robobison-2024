@@ -128,7 +128,7 @@ export default function Home() {
           Cat Journal
         </h1>
         <h2
-          className="font-readyforfall text-5xl text-center text-fontColMain"
+          className="font-readyforfall text-4xl text-center text-fontColMain"
           style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
         >
           CATJ
@@ -137,9 +137,6 @@ export default function Home() {
     </div>
   );
 }
-
-//TODO fix the meow! to the side. Fix the font. Do something with the background and make it prettier. Decor: make some 'meow's appear on the screen at some places floating on screen (lower opacity)
-
 //COMMENTS HERE ARE BY ASHLEY BCS SHE WAS LEARNING REACT ETC.
 
 /**

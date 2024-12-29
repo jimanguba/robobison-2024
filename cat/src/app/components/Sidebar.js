@@ -75,7 +75,6 @@ const Sidebar = () => {
 
       {/* Sidebar Drawer */}
       <Drawer
-        variant="persistent"
         anchor="left"
         open={isDrawerOpen}
         onClose={toggleDrawer}
