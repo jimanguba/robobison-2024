@@ -7,6 +7,7 @@ import "./calendar.css";
 import dayjs from "dayjs";
 import { getEmotion } from "../data";
 import { chartData } from "../data";
+import { rgb } from "d3";
 const JournalOverview = () => {
   const [viewType, setViewType] = useState("grid");
   const [date, setDate] = useState(new Date());
@@ -75,6 +76,19 @@ const JournalOverview = () => {
     setChartModalOpen(false);
   };
 
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "white",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    backdropFilter: "blur(15px)",
+  };
+
   return (
     <Box sx={{ padding: 4 }}>
       <Box
@@ -129,7 +143,7 @@ const JournalOverview = () => {
             height: "20px",
           }}
         >
-          See the Statistics
+          Monthly Mood Overview
         </Button>
       </Box>
 
@@ -158,21 +172,41 @@ const JournalOverview = () => {
         ))}
 
         {calendarMonth.map((day, index) => (
-          <Button
-            className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
-            key={index}
-            onClick={handleOpen}
-          >
-            {day ? day.date() : ""}
-            {/* Print the emoji emotion */}
-            {day ? (
-              <div className="text-2xl">
-                {getEmotion(chartData[day.date() - 1].score)}
-              </div>
-            ) : (
-              ""
-            )}
-          </Button>
+          <div key={index}>
+            <Button
+              className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
+              onClick={handleOpen}
+            >
+              {day ? day.date() : ""}
+              {/* Print the emoji emotion */}
+              {day ? (
+                <div className="text-3xl">
+                  {getEmotion(chartData[day.date() - 1].score)}
+                </div>
+              ) : (
+                "hehe"
+              )}
+            </Button>
+
+            <Modal
+              open={chartModalOpen}
+              onClose={handleClose}
+              aria-labelledby="modal-title"
+              aria-describedby="modal-description"
+            >
+              <Box sx={modalStyle}>
+                <Typography id="modal-title" variant="h6" component="h2">
+                  Text in a modal
+                </Typography>
+                <Typography id="modal-description" sx={{ mt: 2 }}>
+                  Duis mollis, est non commodo luctus, nisi erat porttitor
+                  ligula.
+                </Typography>
+              </Box>
+              {/*if user hasn't add any journal of any cat, have a button to add journal
+                 Only increase this if there are existing cats*/}
+            </Modal>
+          </div>
         ))}
       </div>
     </Box>
