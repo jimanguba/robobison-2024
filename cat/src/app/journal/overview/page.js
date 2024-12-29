@@ -196,11 +196,11 @@ const JournalOverview = () => {
             >
               <Box sx={modalStyle}>
                 <Typography id="modal-title" variant="h6" component="h2">
-                  Text in a modal
+                  Cat 1 {/*This should be replaced with however many cats's names user have*/}
                 </Typography>
                 <Typography id="modal-description" sx={{ mt: 2 }}>
-                  Duis mollis, est non commodo luctus, nisi erat porttitor
-                  ligula.
+                  Mood :
+                  <Button className="flex-col text-left ">Details</Button> {/*Direct using useRoute*/}
                 </Typography>
               </Box>
               {/*if user hasn't add any journal of any cat, have a button to add journal
