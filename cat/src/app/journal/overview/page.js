@@ -14,6 +14,7 @@ const JournalOverview = () => {
   const [test, setTest] = useState(1);
   const [calendarMonth, setCalendarMonth] = useState([]);
   const [chartModalOpen, setChartModalOpen] = useState(false);
+  const [dayModalOpen, setDayModalOpen] = useState(false);
 
   // day of week
   const dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -69,11 +70,18 @@ const JournalOverview = () => {
     return monthYear;
   };
 
-  const handleOpen = () => {
+  const chartHandleOpen = () => {
     setChartModalOpen(true);
   };
-  const handleClose = () => {
+  const chartHandleClose = () => {
     setChartModalOpen(false);
+  };
+
+  const dayHandleOpen = () => {
+    setDayModalOpen(true);
+  };
+  const dayHandleClose = () => {
+    setDayModalOpen(false);
   };
 
   const modalStyle = {
@@ -137,7 +145,7 @@ const JournalOverview = () => {
         {/* Button to let user see the chart */}
         <Button
           variant="outlined"
-          onClick={handleOpen}
+          onClick={chartHandleOpen}
           sx={{
             fontSize: "1rem", // Custom font size
             height: "20px",
@@ -150,7 +158,7 @@ const JournalOverview = () => {
       {/* Chart */}
       <Modal
         open={chartModalOpen}
-        onClose={handleClose}
+        onClose={chartHandleClose}
         sx={{ backdropFilter: "blur(15px)" }}
       >
         <Box
@@ -160,6 +168,7 @@ const JournalOverview = () => {
           <MoodChart data={chartData} width={1300} height={400}></MoodChart>
         </Box>
       </Modal>
+
       <div className="calendar">
         {/* Day of week on the header */}
         {dayOfWeek.map((day) => (
@@ -175,7 +184,7 @@ const JournalOverview = () => {
           <div key={index}>
             <Button
               className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
-              onClick={handleOpen}
+              onClick={dayHandleOpen}
             >
               {day ? day.date() : ""}
               {/* Print the emoji emotion */}
@@ -184,23 +193,19 @@ const JournalOverview = () => {
                   {getEmotion(chartData[day.date() - 1].score)}
                 </div>
               ) : (
-                "hehe"
+                ""
               )}
             </Button>
 
-            <Modal
-              open={chartModalOpen}
-              onClose={handleClose}
-              aria-labelledby="modal-title"
-              aria-describedby="modal-description"
-            >
+            <Modal open={dayModalOpen} onClose={dayHandleClose}>
               <Box sx={modalStyle}>
                 <Typography id="modal-title" variant="h6" component="h2">
-                  Cat 1 {/*This should be replaced with however many cats's names user have*/}
+                  Cat 1{" "}
+                  {/*This should be replaced with however many cats's names user have*/}
                 </Typography>
                 <Typography id="modal-description" sx={{ mt: 2 }}>
-                  Mood :
-                  <Button className="flex-col text-left ">Details</Button> {/*Direct using useRoute*/}
+                  Mood :<Button className="flex-col text-left ">Details</Button>{" "}
+                  {/*Direct using useRoute*/}
                 </Typography>
               </Box>
               {/*if user hasn't add any journal of any cat, have a button to add journal
