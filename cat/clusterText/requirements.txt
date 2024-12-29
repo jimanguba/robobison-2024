@@ -1,2 +1,0 @@
-bertopic
-sentence-transformers
