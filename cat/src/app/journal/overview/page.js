@@ -211,49 +211,50 @@ const JournalOverview = () => {
           ))}
 
           {calendarMonth.map((day, index) => (
-            <div key={index}>
-              <Button
-                className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
-                onClick={() => dayHandleOpen(day)}
-              >
-                {day ? day.date() : ""}
-                {/* Print the emoji emotion */}
-                {day ? (
-                  <div className="text-3xl">
-                    {getEmotion(chartData[day.date() - 1].score)}
-                  </div>
-                ) : (
-                  ""
-                )}
-              </Button>
+            <Button
+              className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
+              key={index}
+              onClick={() => dayHandleOpen(day)}
+            >
+              {day ? day.date() : ""}
+              {/* Print the emoji emotion */}
+              {day ? (
+                <div className="text-3xl">
+                  {getEmotion(chartData[day.date() - 1].score)}
 
-              <Modal
-                open={dayModalOpen}
-                onClose={dayHandleClose}
-                sx={modalStyle}
-              >
-                {/* UI for the button summary */}
-                {/* i want to somehow make this a single component for the sake of neat-ness. but idk how.. maybe jsx -ashley */}
-                <Box>
-                  <Typography id="modal-title" variant="h5">
-                    Cat 1
-                    {/* This should be replaced with however many cats's names user have*/}
-                  </Typography>
-                  <Typography id="modal-description" sx={{ mt: 2 }}>
-                    Mood : {/*Somehow use database to put the value here */}
-                  </Typography>
-
-                  <Button
-                    onClick={() => useRouter().push("/authentication/sign-up")}
+                  <Modal
+                    open={dayModalOpen}
+                    onClose={dayHandleClose}
+                    sx={modalStyle}
                   >
-                    Details
-                  </Button>
-                  {/*Direct using useRoute*/}
-                </Box>
-                {/*if user hasn't add any journal of any cat, have a button to add journal
+                    {/* UI for the button summary */}
+                    {/* i want to somehow make this a single component for the sake of neat-ness. but idk how.. maybe jsx -ashley */}
+                    <Box>
+                      <Typography id="modal-title" variant="h5">
+                        Cat 1
+                        {/* This should be replaced with however many cats's names user have*/}
+                      </Typography>
+                      <Typography id="modal-description" sx={{ mt: 2 }}>
+                        Mood : {/*Somehow use database to put the value here */}
+                      </Typography>
+
+                      <Button
+                        onClick={() =>
+                          useRouter().push("/authentication/sign-up")
+                        }
+                      >
+                        Details
+                      </Button>
+                      {/*Direct using useRoute*/}
+                    </Box>
+                    {/*if user hasn't add any journal of any cat, have a button to add journal
                  Only increase this if there are existing cats*/}
-              </Modal>
-            </div>
+                  </Modal>
+                </div>
+              ) : (
+                ""
+              )}
+            </Button>
           ))}
         </div>
       </Box>
