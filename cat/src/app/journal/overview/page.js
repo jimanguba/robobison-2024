@@ -1,20 +1,24 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Modal } from "@mui/material";
+import { Box, Typography, Button, Modal, Fade } from "@mui/material";
 import MoodChart from "../chart/MoodChart";
 import "./calendar.css";
 import dayjs from "dayjs";
 import { getEmotion } from "../data";
 import { chartData } from "../data";
-import { rgb } from "d3";
+import Image from "next/image";
+import sillyCat from "../../images/skibidi cat.png";
+
 const JournalOverview = () => {
-  const [viewType, setViewType] = useState("grid");
   const [date, setDate] = useState(new Date());
   const [test, setTest] = useState(1);
   const [calendarMonth, setCalendarMonth] = useState([]);
   const [chartModalOpen, setChartModalOpen] = useState(false);
   const [dayModalOpen, setDayModalOpen] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(dayjs(new Date()));
+  const router = useRouter();
 
   // day of week
   const dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -70,6 +74,7 @@ const JournalOverview = () => {
     return monthYear;
   };
 
+  // Handle Chart Modal View
   const chartHandleOpen = () => {
     setChartModalOpen(true);
   };
@@ -77,24 +82,136 @@ const JournalOverview = () => {
     setChartModalOpen(false);
   };
 
-  const dayHandleOpen = () => {
-    setDayModalOpen(true);
+  // Handle journal entries Modal
+  const dayHandleOpen = (day) => {
+    if (day !== null) setDayModalOpen(true);
   };
   const dayHandleClose = () => {
     setDayModalOpen(false);
   };
 
-  const modalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "white",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-    backdropFilter: "blur(15px)",
+  const JournalModal = ({ day, text }) => {
+    const modalStyle = {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "50%",
+      height: "75%",
+      bgcolor: "rgba(255, 196, 147, 0.5)",
+      border: "2px solid #000",
+      boxShadow: 24,
+      p: 2,
+      backdropFilter: "blur(15px)",
+      borderRadius: "15px",
+    };
+
+    return (
+      <Modal
+        open={dayModalOpen}
+        onClose={dayHandleClose}
+        closeAfterTransition
+        BackdropProps={{
+          timeout: 1000, // Backdrop fade timing
+        }}
+      >
+        {day ? (
+          <Fade in={dayModalOpen}>
+            <Box sx={modalStyle}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between", // Space between elements
+                  alignItems: "center", // Align items vertically
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "4rem",
+                    zIndex: 1,
+                    position: "absolute",
+                    top: "2px",
+                    left: "5%",
+                  }}
+                >
+                  {getEmotion(chartData[day.date() - 1].score)}
+                </span>
+                <div></div>
+                <h1
+                  style={{
+                    fontSize: "1.75rem",
+                    textAlign: "center",
+                    color: "rgba(255, 192, 45, 0.5)",
+                    border: "2px solid rgba(248, 228, 181, 0.5)",
+                    padding: "5px",
+                    borderRadius: "15px",
+                    boxShadow: "0px 6px 2px rgba(0, 0, 0, 0.2)",
+                    backgroundColor: "rgba(193, 170, 170, 0.2)",
+                  }}
+                >
+                  {dayjs(day).format("MMMM D, YYYY")}
+                </h1>
+                <div style={{ width: "10%" }}></div>
+              </div>
+
+              <div
+                style={{
+                  height: "100%",
+                  marginTop: "5%",
+                }}
+              >
+                {text ? (
+                  <div>{text}</div>
+                ) : (
+                  <div
+                    style={{
+                      display: "grid",
+                      placeItems: "center",
+                      height: "60%",
+                    }}
+                  >
+                    <Button onClick={() => router.push("/journal/add")}>
+                      <Image
+                        src={sillyCat}
+                        alt="Skibidi Cat"
+                        width={300}
+                        height={300}
+                      />
+                    </Button>
+                    <Button
+                      style={{
+                        fontSize: "1.5rem",
+                        textAlign: "center",
+                        color: "rgba(255, 192, 45, 0.5)",
+                        padding: "5px",
+                        whiteSpace: "pre-line",
+                      }}
+                      disableRipple // Disables the ripple effect
+                      disableElevation // Removes the shadow effect when clicked
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "transparent", // Removes hover background
+                        },
+                      }}
+                      onClick={() => router.push("/journal/add")}
+                    >
+                      {
+                        "Seems like you didn't add your journal today...\n Baka!! add some"
+                      }
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </Box>
+          </Fade>
+        ) : (
+          <div></div>
+        )}
+
+        {/*if user hasn't add any journal of any cat, have a button to add journal
+                 Only increase this if there are existing cats*/}
+      </Modal>
+    );
   };
 
   return (
@@ -180,38 +297,29 @@ const JournalOverview = () => {
           </div>
         ))}
 
-        {calendarMonth.map((day, index) => (
-          <div key={index}>
-            <Button
-              className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
-              onClick={dayHandleOpen}
-            >
-              {day ? day.date() : ""}
-              {/* Print the emoji emotion */}
-              {day ? (
-                <div className="text-3xl">
-                  {getEmotion(chartData[day.date() - 1].score)}
-                </div>
-              ) : (
-                ""
-              )}
-            </Button>
+        {/* Modal for journal summary */}
+        <JournalModal day={selectedDay} />
 
-            <Modal open={dayModalOpen} onClose={dayHandleClose}>
-              <Box sx={modalStyle}>
-                <Typography id="modal-title" variant="h6" component="h2">
-                  Cat 1{" "}
-                  {/*This should be replaced with however many cats's names user have*/}
-                </Typography>
-                <Typography id="modal-description" sx={{ mt: 2 }}>
-                  Mood :<Button className="flex-col text-left ">Details</Button>{" "}
-                  {/*Direct using useRoute*/}
-                </Typography>
-              </Box>
-              {/*if user hasn't add any journal of any cat, have a button to add journal
-                 Only increase this if there are existing cats*/}
-            </Modal>
-          </div>
+        {/* Calendar view */}
+        {calendarMonth.map((day, index) => (
+          <Button
+            className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
+            onClick={() => {
+              dayHandleOpen(day);
+              setSelectedDay(day);
+            }}
+            key={index}
+          >
+            {day ? day.date() : ""}
+            {/* Print the emoji emotion */}
+            {day ? (
+              <div className="text-3xl">
+                {getEmotion(chartData[day.date() - 1].score)}
+              </div>
+            ) : (
+              ""
+            )}
+          </Button>
         ))}
       </div>
     </Box>
