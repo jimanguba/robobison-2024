@@ -129,7 +129,11 @@ const JournalOverview = () => {
       </Box>
 
       {/* Chart */}
-      <Modal open={chartModalOpen} onClose={() => setChartModalOpen(false)} sx={{ backdropFilter: "blur(15px)" }}>
+      <Modal
+        open={chartModalOpen}
+        onClose={() => setChartModalOpen(false)}
+        sx={{ backdropFilter: "blur(15px)" }}
+      >
         <Box
           sx={{ justifyContent: "center", m: 4 }}
           className="flex items-center"
@@ -154,6 +158,7 @@ const JournalOverview = () => {
             key={index}
           >
             {day ? day.date() : ""}
+
             {/* Print the emoji emotion */}
             {day ? (
               <div className="text-2xl">

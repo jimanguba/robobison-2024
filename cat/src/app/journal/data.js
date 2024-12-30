@@ -40,3 +40,16 @@ export const chartData = [
   { label: "30", score: 3 },
   { label: "31", score: 3 },
 ];
+
+// List of sticker url
+export const stickers = [
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/campfire.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/cat.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/crab.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/diving.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/ice-cream.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/rubber-ring.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/sand-castle.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/sunbathing.png",
+  "https://catjstickers.s3.ca-central-1.amazonaws.com/stickers/watermelon.png",
+];

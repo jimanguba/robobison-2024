@@ -6,6 +6,7 @@ import { Background, Cat } from "@/app/page";
 import PetsIcon from "@mui/icons-material/Pets";
 import { useRouter } from "next/navigation";
 import DrawToolBar from "./DrawToolBar";
+import DisplayStickers from "./DisplayStickers";
 
 export default function MoodCard() {
   const [moodIntensity, setMoodIntensity] = useState(3);
@@ -151,7 +152,7 @@ export default function MoodCard() {
               },
             }}
           />
-
+          <DisplayStickers />
           {/* Submit Button */}
           <div
             style={{
