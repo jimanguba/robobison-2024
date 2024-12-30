@@ -101,7 +101,7 @@ const JournalOverview = () => {
       bgcolor: "rgba(255, 196, 147, 0.5)",
       border: "2px solid #000",
       boxShadow: 24,
-      p: 2,
+      p: "3px",
       backdropFilter: "blur(15px)",
       borderRadius: "15px",
     };
@@ -128,15 +128,10 @@ const JournalOverview = () => {
                 <span
                   style={{
                     fontSize: "4rem",
-                    zIndex: 1,
-                    position: "absolute",
-                    top: "2px",
-                    left: "5%",
                   }}
                 >
                   {getEmotion(chartData[day.date() - 1].score)}
                 </span>
-                <div></div>
                 <h1
                   style={{
                     fontSize: "1.75rem",
@@ -157,7 +152,6 @@ const JournalOverview = () => {
               <div
                 style={{
                   height: "100%",
-                  marginTop: "5%",
                 }}
               >
                 {text ? (
@@ -196,7 +190,7 @@ const JournalOverview = () => {
                       onClick={() => router.push("/journal/add")}
                     >
                       {
-                        "Seems like you didn't add your journal today...\n Baka!! add some"
+                        "Seems like you didn't add your journal today...\n Baka, add some"
                       }
                     </Button>
                   </div>
