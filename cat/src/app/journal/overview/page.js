@@ -1,13 +1,34 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Modal } from "@mui/material";
+import React, { useEffect, useState, useRouter } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Modal,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import MoodChart from "../chart/MoodChart";
 import "./calendar.css";
 import dayjs from "dayjs";
 import { getEmotion } from "../data";
 import { chartData } from "../data";
 import { rgb } from "d3";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#794f2c",
+      light: "#d6b89f",
+      contrastText: "#fff",
+    },
+  },
+  typography: {
+    fontFamily: "GoMocha", //doesn't work im so frustrated -ashley
+  },
+});
+
 const JournalOverview = () => {
   const [viewType, setViewType] = useState("grid");
   const [date, setDate] = useState(new Date());
@@ -89,132 +110,147 @@ const JournalOverview = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "white",
+    width: 300,
+    height: 200,
+    bgcolor: "background.paper",
     border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-    backdropFilter: "blur(15px)",
+    pt: 3,
+    px: 4,
+    pb: 3,
   };
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 1,
-          alignItems: "center",
-          marginBottom: "6px",
-        }}
-      >
-        <Button
-          variant="outlined"
-          onClick={() => {
-            updateDate(date, -1);
-            setTest(() => test - 1);
-          }}
-          sx={{
-            fontSize: "1.7rem", // Custom font size
-            border: "none",
-            height: "20px",
-          }}
-        >
-          &lt;
-        </Button>
-
-        <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <Typography variant="h4"> {getMonthYear(date)}</Typography>
-        </Box>
-
-        <Button
-          variant="outlined"
-          onClick={() => {
-            updateDate(date, 1);
-            setTest(() => test + 1);
-          }}
-          sx={{
-            fontSize: "1.7rem", // Custom font size
-            border: "none",
-            height: "20px",
-          }}
-        >
-          &gt;
-        </Button>
-
-        {/* Button to let user see the chart */}
-        <Button
-          variant="outlined"
-          onClick={chartHandleOpen}
-          sx={{
-            fontSize: "1rem", // Custom font size
-            height: "20px",
-          }}
-        >
-          Monthly Mood Overview
-        </Button>
-      </Box>
-
-      {/* Chart */}
-      <Modal
-        open={chartModalOpen}
-        onClose={chartHandleClose}
-        sx={{ backdropFilter: "blur(15px)" }}
-      >
+    <ThemeProvider theme={theme}>
+      <Box sx={{ padding: 4 }}>
         <Box
-          sx={{ justifyContent: "center", m: 4 }}
-          className="flex items-center"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 1,
+            alignItems: "center",
+            marginBottom: "6px",
+          }}
         >
-          <MoodChart data={chartData} width={1300} height={400}></MoodChart>
-        </Box>
-      </Modal>
-
-      <div className="calendar">
-        {/* Day of week on the header */}
-        {dayOfWeek.map((day) => (
-          <div
-            className="text-center text-slate-400 text-2xl pb-3 mt-5"
-            key={day}
+          <Button
+            variant="outlined"
+            onClick={() => {
+              updateDate(date, -1);
+              setTest(() => test - 1);
+            }}
+            sx={{
+              fontSize: "1.7rem", // Custom font size
+              border: "none",
+              height: "20px",
+            }}
           >
-            {day}
-          </div>
-        ))}
+            &lt;
+          </Button>
 
-        {calendarMonth.map((day, index) => (
-          <div key={index}>
-            <Button
-              className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
-              onClick={dayHandleOpen}
+          <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+            <Typography variant="h4"> {getMonthYear(date)}</Typography>
+          </Box>
+
+          <Button
+            variant="outlined"
+            onClick={() => {
+              updateDate(date, 1);
+              setTest(() => test + 1);
+            }}
+            sx={{
+              fontSize: "1.7rem", // Custom font size
+              border: "none",
+              height: "20px",
+            }}
+          >
+            &gt;
+          </Button>
+
+          {/* Button to let user see the chart */}
+          <Button
+            variant="outlined"
+            onClick={chartHandleOpen}
+            sx={{
+              fontSize: "1rem", // Custom font size
+              height: "20px",
+            }}
+          >
+            Monthly Mood Overview
+          </Button>
+        </Box>
+
+        {/* Chart */}
+        <Modal
+          open={chartModalOpen}
+          onClose={chartHandleClose}
+          sx={{ backdropFilter: "blur(15px)" }}
+        >
+          <Box
+            sx={{ justifyContent: "center", m: 4 }}
+            className="flex items-center"
+          >
+            <MoodChart data={chartData} width={1300} height={400}></MoodChart>
+          </Box>
+        </Modal>
+
+        <div className="calendar">
+          {/* Day of week on the header */}
+          {dayOfWeek.map((day) => (
+            <div
+              className="text-center text-slate-400 text-2xl pb-3 mt-5"
+              key={day}
             >
-              {day ? day.date() : ""}
-              {/* Print the emoji emotion */}
-              {day ? (
-                <div className="text-3xl">
-                  {getEmotion(chartData[day.date() - 1].score)}
-                </div>
-              ) : (
-                ""
-              )}
-            </Button>
+              {day}
+            </div>
+          ))}
 
-            <Modal open={dayModalOpen} onClose={dayHandleClose}>
-              <Box sx={modalStyle}>
-                <Typography id="modal-title" variant="h6" component="h2">
-                  Cat 1{" "}
-                  {/*This should be replaced with however many cats's names user have*/}
-                </Typography>
-                <Typography id="modal-description" sx={{ mt: 2 }}>
-                  Mood :<Button className="flex-col text-left ">Details</Button>{" "}
+          {calendarMonth.map((day, index) => (
+            <div key={index}>
+              <Button
+                className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
+                onClick={dayHandleOpen}
+              >
+                {day ? day.date() : ""}
+                {/* Print the emoji emotion */}
+                {day ? (
+                  <div className="text-3xl">
+                    {getEmotion(chartData[day.date() - 1].score)}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </Button>
+
+              <Modal
+                open={dayModalOpen}
+                onClose={dayHandleClose}
+                sx={modalStyle}
+              >
+                {/* UI for the button summary */}
+                {/* i want to somehow make this a single component for the sake of neat-ness. but idk how.. maybe jsx -ashley */}
+                <Box>
+                  <Typography id="modal-title" variant="h5">
+                    Cat 1
+                    {/* This should be replaced with however many cats's names user have*/}
+                  </Typography>
+                  <Typography id="modal-description" sx={{ mt: 2 }}>
+                    Mood : {/*Somehow use database to put the value here */}
+                  </Typography>
+
+                  <Button
+                    onClick={() => useRouter().push("/authentication/sign-up")}
+                  >
+                    Details
+                  </Button>
                   {/*Direct using useRoute*/}
-                </Typography>
-              </Box>
-              {/*if user hasn't add any journal of any cat, have a button to add journal
+                </Box>
+                {/*if user hasn't add any journal of any cat, have a button to add journal
                  Only increase this if there are existing cats*/}
-            </Modal>
-          </div>
-        ))}
-      </div>
-    </Box>
+              </Modal>
+            </div>
+          ))}
+        </div>
+      </Box>
+    </ThemeProvider>
   );
 };
 
