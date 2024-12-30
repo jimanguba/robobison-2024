@@ -5,6 +5,7 @@ import { Slider, Button, TextField } from "@mui/material";
 import { Background, Cat } from "@/app/page";
 import PetsIcon from "@mui/icons-material/Pets";
 import { useRouter } from "next/navigation";
+import { Drawing } from "./Drawing";
 import DrawToolBar from "./DrawToolBar";
 import DisplayStickers from "./DisplayStickers";
 
@@ -12,9 +13,6 @@ export default function MoodCard() {
   const [moodIntensity, setMoodIntensity] = useState(3);
   const [longAnswer, setLongAnswer] = useState("");
   const router = useRouter();
-
-  // Keep the state of which tool we are choosing
-  const [toolInUse, setToolInUse] = useState(2);
 
   const handleChange = (event) => {
     setLongAnswer(event.target.value);
@@ -36,8 +34,6 @@ export default function MoodCard() {
       {/* Input thing */}
       <div className="flex items-center justify-center items-center  w-1/2">
         <div className="absolute bg-[#EEDFD5] w-[50%] h-[85%] p-8 rounded-xl shadow-lg">
-          {/* Display the toolbar */}
-          <DrawToolBar toolInUse={toolInUse} setToolInUse={setToolInUse} />
           <h1
             className="text-fontColMain font-readyforfall text-5xl text-center mb-14"
             style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
@@ -177,6 +173,9 @@ export default function MoodCard() {
             </Button>
           </div>
         </div>
+      </div>
+      <div className="flex bg-red-100 justify-contennt-center w-[1000px] h-[1000px]">
+        <Drawing />
       </div>
     </div>
   );
