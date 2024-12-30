@@ -98,8 +98,12 @@ const JournalOverview = () => {
     setChartModalOpen(false);
   };
 
-  const dayHandleOpen = () => {
-    setDayModalOpen(true);
+  const dayHandleOpen = (day) => {
+    if (day != null) {
+      setDayModalOpen(true);
+    } else {
+      setDayModalOpen(false);
+    }
   };
   const dayHandleClose = () => {
     setDayModalOpen(false);
@@ -207,7 +211,7 @@ const JournalOverview = () => {
             <div key={index}>
               <Button
                 className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
-                onClick={dayHandleOpen}
+                onClick={() => dayHandleOpen(day)}
               >
                 {day ? day.date() : ""}
                 {/* Print the emoji emotion */}
