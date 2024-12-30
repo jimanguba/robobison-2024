@@ -4,7 +4,7 @@ import { FaRegCircle } from "react-icons/fa";
 import { GoPencil } from "react-icons/go";
 import { RxEraser } from "react-icons/rx";
 import { TfiHandDrag } from "react-icons/tfi";
-import { LuMousePointer } from "react-icons/lu";
+import { LuMousePointer, LuSticker } from "react-icons/lu";
 
 const DrawToolBar = ({ toolInUse, onToolChange }) => {
   return (
@@ -103,6 +103,22 @@ const DrawToolBar = ({ toolInUse, onToolChange }) => {
         onClick={() => onToolChange(6)}
       >
         <RxEraser size={40} />
+      </IconButton>
+
+      <IconButton
+        sx={
+          toolInUse == 7
+            ? {
+                backgroundColor: "#C08F6F",
+                "&:hover": {
+                  backgroundColor: "#C08F6F",
+                },
+              }
+            : {}
+        }
+        onClick={() => onToolChange(7)}
+      >
+        <LuSticker size={40} />
       </IconButton>
     </div>
   );

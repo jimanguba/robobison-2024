@@ -3,9 +3,8 @@
 import { useState, useRef } from "react";
 import { stickers } from "../data";
 
-export default function StickerPicker() {
+export default function StickerPicker({ selectedSticker, setSelectedSticker }) {
   // State to hold the selected sticker
-  const [selectedSticker, setSelectedSticker] = useState(null);
   const containerRef = useRef(null); // Ref for the scrollable container
 
   // Mouse event handlers for grab-and-scroll
@@ -34,8 +33,6 @@ export default function StickerPicker() {
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <h1>Sticker Picker</h1>
-
       {/* Horizontal Scrollable Sticker Container */}
       <div
         ref={containerRef}
@@ -48,6 +45,11 @@ export default function StickerPicker() {
           border: "1px solid #ddd", // Optional styling
           width: "80%", // Adjust to control container width
           cursor: "grab", // Add grab cursor
+          scrollbarWidth: "none", // Hide scrollbar for Firefox
+          msOverflowStyle: "none", // Hide scrollbar for IE
+          backgroundColor: "#FFDDA9",
+          borderRadius: "20px",
+          boxShadow: "0 10px 15px rgba(0, 0, 0, 0.2)",
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -64,6 +66,11 @@ export default function StickerPicker() {
               height: "100px",
               cursor: "pointer",
               flexShrink: 0, // Prevent shrinking of images
+              border: "2px solid rgb(249, 204, 175)",
+              opacity: selectedSticker === sticker ? 0.7 : 1,
+              padding: "8px",
+              borderRadius: "10px",
+              transition: "opacity 0.3s ease",
             }}
             onClick={() => setSelectedSticker(sticker)} // Set selected sticker on click
             onMouseDown={(e) => e.preventDefault()}
@@ -71,10 +78,8 @@ export default function StickerPicker() {
         ))}
       </div>
 
-      {/* Selected Sticker Display */}
       {selectedSticker && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Selected Sticker</h2>
+        <div>
           <img
             src={selectedSticker}
             alt="Selected Sticker"
