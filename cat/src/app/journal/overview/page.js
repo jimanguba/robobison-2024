@@ -14,7 +14,7 @@ import "./calendar.css";
 import dayjs from "dayjs";
 import { getEmotion } from "../data";
 import { chartData } from "../data";
-import { rgb } from "d3";
+import { color, rgb } from "d3";
 
 const theme = createTheme({
   palette: {
@@ -25,7 +25,8 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "GoMocha", //doesn't work im so frustrated -ashley
+    fontFamily: "GoMocha",
+    fontSize: 18,
   },
 });
 
@@ -117,7 +118,7 @@ const JournalOverview = () => {
     width: 300,
     height: 200,
     bgcolor: "background.paper",
-    border: "2px solid #000",
+    border: "10px transparent",
     pt: 3,
     px: 4,
     pb: 3,
@@ -125,7 +126,7 @@ const JournalOverview = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ padding: 4 }}>
+      <Box sx={{ padding: 4, backgroundColor: "#fcf6f2", minHeight: "100vh" }}>
         <Box
           sx={{
             display: "flex",
@@ -151,7 +152,9 @@ const JournalOverview = () => {
           </Button>
 
           <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-            <Typography variant="h4"> {getMonthYear(date)}</Typography>
+            <Typography variant="h4" sx={{ color: "#5e3b1e" }}>
+              {getMonthYear(date)}
+            </Typography>
           </Box>
 
           <Button
