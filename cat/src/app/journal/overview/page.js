@@ -2,7 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Modal, Fade } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Modal,
+  Fade,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import MoodChart from "../chart/MoodChart";
 import "./calendar.css";
 import dayjs from "dayjs";
@@ -10,6 +18,20 @@ import { getEmotion } from "../data";
 import { chartData } from "../data";
 import Image from "next/image";
 import sillyCat from "../../images/skibidi cat.png";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#794f2c",
+      light: "#d6b89f",
+      contrastText: "#fff",
+    },
+  },
+  typography: {
+    fontFamily: "GoMocha",
+    fontSize: 18,
+  },
+});
 
 const JournalOverview = () => {
   const [date, setDate] = useState(new Date());
@@ -101,7 +123,7 @@ const JournalOverview = () => {
       bgcolor: "rgba(255, 196, 147, 0.5)",
       border: "2px solid #000",
       boxShadow: 24,
-      p: "3px",
+      p: 2,
       backdropFilter: "blur(15px)",
       borderRadius: "15px",
     };
@@ -125,6 +147,16 @@ const JournalOverview = () => {
                   alignItems: "center", // Align items vertically
                 }}
               >
+                <div
+                  style={{
+                    fontSize: "1.75rem",
+                    padding: "5px",
+                    borderRadius: "15px",
+                    fontFamily: "GoMocha",
+                  }}
+                >
+                  {dayjs(day).format("MMMM D, YYYY")}
+                </div>
                 <span
                   style={{
                     fontSize: "4rem",
@@ -132,21 +164,6 @@ const JournalOverview = () => {
                 >
                   {getEmotion(chartData[day.date() - 1].score)}
                 </span>
-                <h1
-                  style={{
-                    fontSize: "1.75rem",
-                    textAlign: "center",
-                    color: "rgba(255, 192, 45, 0.5)",
-                    border: "2px solid rgba(248, 228, 181, 0.5)",
-                    padding: "5px",
-                    borderRadius: "15px",
-                    boxShadow: "0px 6px 2px rgba(0, 0, 0, 0.2)",
-                    backgroundColor: "rgba(193, 170, 170, 0.2)",
-                  }}
-                >
-                  {dayjs(day).format("MMMM D, YYYY")}
-                </h1>
-                <div style={{ width: "10%" }}></div>
               </div>
 
               <div
@@ -174,7 +191,7 @@ const JournalOverview = () => {
                     </Button>
                     <Button
                       style={{
-                        fontSize: "1.5rem",
+                        fontSize: "1.75rem",
                         textAlign: "center",
                         color: "rgba(255, 192, 45, 0.5)",
                         padding: "5px",
@@ -209,114 +226,118 @@ const JournalOverview = () => {
   };
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 1,
-          alignItems: "center",
-          marginBottom: "6px",
-        }}
-      >
-        <Button
-          variant="outlined"
-          onClick={() => {
-            updateDate(date, -1);
-            setTest(() => test - 1);
-          }}
-          sx={{
-            fontSize: "1.7rem", // Custom font size
-            border: "none",
-            height: "20px",
-          }}
-        >
-          &lt;
-        </Button>
-
-        <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <Typography variant="h4"> {getMonthYear(date)}</Typography>
-        </Box>
-
-        <Button
-          variant="outlined"
-          onClick={() => {
-            updateDate(date, 1);
-            setTest(() => test + 1);
-          }}
-          sx={{
-            fontSize: "1.7rem", // Custom font size
-            border: "none",
-            height: "20px",
-          }}
-        >
-          &gt;
-        </Button>
-
-        {/* Button to let user see the chart */}
-        <Button
-          variant="outlined"
-          onClick={chartHandleOpen}
-          sx={{
-            fontSize: "1rem", // Custom font size
-            height: "20px",
-          }}
-        >
-          Monthly Mood Overview
-        </Button>
-      </Box>
-
-      {/* Chart */}
-      <Modal
-        open={chartModalOpen}
-        onClose={chartHandleClose}
-        sx={{ backdropFilter: "blur(15px)" }}
-      >
-        <Box
-          sx={{ justifyContent: "center", m: 4 }}
-          className="flex items-center"
-        >
-          <MoodChart data={chartData} width={1300} height={400}></MoodChart>
-        </Box>
-      </Modal>
-
-      <div className="calendar">
-        {/* Day of week on the header */}
-        {dayOfWeek.map((day) => (
-          <div
-            className="text-center text-slate-400 text-2xl pb-3 mt-5"
-            key={day}
-          >
-            {day}
-          </div>
-        ))}
-
-        {/* Modal for journal summary */}
-        <JournalModal day={selectedDay} />
-
-        {/* Calendar view */}
-        {calendarMonth.map((day, index) => (
-          <Button
-            className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
-            onClick={() => {
-              dayHandleOpen(day);
-              setSelectedDay(day);
+    <ThemeProvider theme={theme}>
+      <Box sx={{ padding: 4, backgroundColor: "#fcf6f2", minHeight: "100vh" }}>
+        <Box sx={{ padding: 4 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 1,
+              alignItems: "center",
+              marginBottom: "6px",
             }}
-            key={index}
           >
-            {day ? day.date() : ""}
-            {/* Print the emoji emotion */}
-            {day ? (
-              <div className="text-3xl">
-                {getEmotion(chartData[day.date() - 1].score)}
+            <Button
+              variant="outlined"
+              onClick={() => {
+                updateDate(date, -1);
+                setTest(() => test - 1);
+              }}
+              sx={{
+                fontSize: "1.7rem", // Custom font size
+                border: "none",
+                height: "20px",
+              }}
+            >
+              &lt;
+            </Button>
+
+            <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+              <Typography variant="h4"> {getMonthYear(date)}</Typography>
+            </Box>
+
+            <Button
+              variant="outlined"
+              onClick={() => {
+                updateDate(date, 1);
+                setTest(() => test + 1);
+              }}
+              sx={{
+                fontSize: "1.7rem", // Custom font size
+                border: "none",
+                height: "20px",
+              }}
+            >
+              &gt;
+            </Button>
+
+            {/* Button to let user see the chart */}
+            <Button
+              variant="outlined"
+              onClick={chartHandleOpen}
+              sx={{
+                fontSize: "1rem", // Custom font size
+                height: "20px",
+              }}
+            >
+              Monthly Mood Overview
+            </Button>
+          </Box>
+
+          {/* Chart */}
+          <Modal
+            open={chartModalOpen}
+            onClose={chartHandleClose}
+            sx={{ backdropFilter: "blur(15px)" }}
+          >
+            <Box
+              sx={{ justifyContent: "center", m: 4 }}
+              className="flex items-center"
+            >
+              <MoodChart data={chartData} width={1300} height={400}></MoodChart>
+            </Box>
+          </Modal>
+
+          <div className="calendar">
+            {/* Day of week on the header */}
+            {dayOfWeek.map((day) => (
+              <div
+                className="text-center text-slate-400 text-2xl pb-3 mt-5"
+                key={day}
+              >
+                {day}
               </div>
-            ) : (
-              ""
-            )}
-          </Button>
-        ))}
-      </div>
-    </Box>
+            ))}
+
+            {/* Modal for journal summary */}
+            <JournalModal day={selectedDay} />
+
+            {/* Calendar view */}
+            {calendarMonth.map((day, index) => (
+              <Button
+                className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
+                onClick={() => {
+                  dayHandleOpen(day);
+                  setSelectedDay(day);
+                }}
+                key={index}
+              >
+                {day ? day.date() : ""}
+                {/* Print the emoji emotion */}
+                {day ? (
+                  <div className="text-3xl">
+                    {getEmotion(chartData[day.date() - 1].score)}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </Button>
+            ))}
+          </div>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 };
 
