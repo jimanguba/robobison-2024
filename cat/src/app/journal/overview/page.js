@@ -121,22 +121,52 @@ const JournalOverview = () => {
           }}
           sx={{
             fontSize: "1rem", // Custom font size
-            height: "20px",
+            height: "40px", // Adjust height for better visual impact
+            fontWeight: "bold", // Make the text bold
+            borderRadius: "8px", // Rounded corners
+            color: "rgb(242, 196, 81)", // Text color
+            background: "rgb(109, 89, 71)", // Subtle gradient for 3D look
+            boxShadow: "4px 4px 10p rgb(246, 150, 150)", // Outer shadow for 3D effect
+            border: 2, // Remove outlined border
+            transition: "all 0.2s ease-in-out", // Smooth animation
           }}
         >
-          See the Statistics
+          Monthly Summary
         </Button>
       </Box>
 
       {/* Chart */}
-      <Modal open={chartModalOpen} onClose={() => setChartModalOpen(false)} sx={{ backdropFilter: "blur(15px)" }}>
+      <Modal
+        open={chartModalOpen}
+        onClose={() => setChartModalOpen(false)}
+        sx={{
+          backdropFilter: "blur(15px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "opacity 0.3s ease-in-out",
+        }}
+      >
         <Box
-          sx={{ justifyContent: "center", m: 4 }}
+          sx={{
+            width: "90%", // Adjust the modal width
+            maxWidth: "1400px", // Set a maximum width
+            bgcolor: "rgb(255, 244, 218)", // Use theme's background color
+            boxShadow: 24, // Elevation for modal box
+            p: 4, // Padding inside the modal
+            borderRadius: 2, // Rounded corners
+          }}
           className="flex items-center"
         >
-          <MoodChart data={chartData} width={1300} height={400}></MoodChart>
+          <MoodChart
+            data={chartData}
+            width={1300}
+            height={400}
+            title={"Summary of Month"}
+          ></MoodChart>
         </Box>
       </Modal>
+
       <div className="calendar">
         {/* Day of week on the header */}
         {dayOfWeek.map((day) => (
