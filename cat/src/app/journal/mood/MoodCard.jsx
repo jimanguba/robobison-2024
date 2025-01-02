@@ -23,7 +23,6 @@ export default function MoodCard() {
   };
 
   return (
-    // <Box sx={modalStyle}>
     <Box
       sx={{
         display: "flex",

@@ -4,10 +4,11 @@ import "./styles.css";
 
 const MoodChart = ({
   data,
-  visibleNum = 10,
+  visibleNum = 15,
   width = 1000,
   height = 500,
-  margin = { top: 60, right: 30, bottom: 50, left: 80 },
+  margin = { top: 90, right: 30, bottom: 50, left: 80 },
+  title = "Monthly Mood Chart",
 }) => {
   const svgRef = useRef();
 
@@ -25,11 +26,16 @@ const MoodChart = ({
 
     const chartWidth = width - margin.left - margin.right;
     const chartHeight = height - margin.top - margin.bottom;
-    let translateLeft = margin.left; // Translate to the left as user drag
+    let translateLeft = margin.left - 30; // Translate to the left as user drag
 
-    const chart = svg
+    const yAxisGroup = svg
       .append("g")
-      .attr("transform", `translate(${translateLeft},${margin.top})`);
+      .attr("transform", `translate(${margin.left - 30},${margin.top})`);
+
+    const chartGroup = svg
+      .append("g")
+      .attr("class", "chart-group")
+      .attr("transform", `translate(${translateLeft - 10},${margin.top})`);
 
     // X Scale (for labels)
     const x = d3
@@ -53,11 +59,11 @@ const MoodChart = ({
             .attr("height", chartHeight - y(step)) // Set height based on step
             .attr("fill", () => {
               // Color based on the step/final height
-              if (step <= 1) return "#f44336";
+              if (step <= 1) return "rgb(246, 124, 87)";
               if (step <= 2) return "#ff9800";
               if (step <= 3) return "#ffc107";
               if (step <= 4) return "#8bc34a";
-              if (step <= 5) return "#4caf50";
+              if (step <= 5) return "rgb(90, 176, 103)";
             })
             .on("end", () => {
               // After each transition step completes
@@ -70,6 +76,7 @@ const MoodChart = ({
       growBar(); // Start the recursive transition
     }
 
+    // Animate each labels changes
     function animateLabels(selection, finalHeight) {
       let step = 0; // Start from 0
 
@@ -92,7 +99,7 @@ const MoodChart = ({
     }
 
     // Append bars with labels
-    chart
+    chartGroup
       .selectAll(".bar-group")
       .data(data)
       .join("g")
@@ -117,8 +124,8 @@ const MoodChart = ({
           .attr("x", () => x(d.label) + x.bandwidth() / 2) // Center label horizontally
           .attr("y", chartHeight - 5) // Start label from bottom initially
           .attr("text-anchor", "middle") // Center-align the label
-          .attr("font-size", "25px")
-          .attr("fill", "white")
+          .attr("font-size", "35px")
+          .attr("fill", "red")
           .text(d.score) // Set the text to the bar's value
           .each(function () {
             animateLabels(d3.select(this), d.score); // Call animateBars for each bar
@@ -126,11 +133,15 @@ const MoodChart = ({
       });
 
     // X Axis
-    chart
+    chartGroup
       .append("g")
       .attr("class", "x-axis") // Add a class
       .attr("transform", `translate(0,${chartHeight})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
+      .selectAll("text") // Select all text elements
+      .style("font-size", "24px") // Set font size
+      .style("font-family", "Mocha")
+      .style("fill", "rgb(255, 155, 88)"); // Set text color
 
     // Dragging behavior
     // Set up drag behavior for horizontal panning
@@ -140,17 +151,66 @@ const MoodChart = ({
       .on("drag", (event) => {
         const dragDistance = event.dx; // Horizontal drag distance
         if (
-          translateLeft + dragDistance <= margin.left &&
+          translateLeft + dragDistance <= margin.left - 40 &&
           translateLeft + dragDistance >=
             -(chartWidth * (data.length / visibleNum - 1))
         )
           translateLeft += dragDistance;
 
-        chart.attr("transform", `translate(${translateLeft},${margin.top})`);
+        chartGroup.attr(
+          "transform",
+          `translate(${translateLeft},${margin.top})`
+        );
       })
       .on("end", () => {});
 
     svg.call(drag);
+
+    // Add a chart title
+    svg
+      .append("text")
+      .attr("class", "chart-title") // Add a class for styling
+      .attr("x", width / 2) // Center the title horizontally
+      .attr("y", margin.top / 3) // Position above the chart
+      .attr("text-anchor", "middle") // Center-align the text
+      .style("font-size", "34px") // Set font size
+      .style("font-weight", "bold") // Make the text bold
+      .style("font-family", "Mocha")
+      .style("fill", "rgb(255, 155, 88)") // Set text color
+      .text(title); // Set the title text
+
+    // Add a rectangle as the background to the yAxisGroup
+    yAxisGroup
+      .append("rect")
+      .attr("x", 30 - margin.left) // Start rectangle to the left of the y-axis
+      .attr("y", -margin.top) // Align with the top of the group
+      .attr("width", margin.left / 2 + 10) // Match the y-axis width
+      .attr("height", height) // Match the y-axis height
+      .attr("fill", "rgb(255, 244, 218)");
+
+    // Append Y Axis
+    yAxisGroup
+      .append("g")
+      .call(
+        d3
+          .axisLeft(y)
+          .ticks(5) // Ensure the ticks align with your scale
+          .tickSize(-width)
+          .tickFormat((d) => emotion[d]) // Map numbers to emojis
+      )
+      .selectAll("text") // Select all tick labels
+      .style("font-size", "33px")
+      .style("font-family", "Mocha");
+
+    // Style the axis line
+    yAxisGroup.selectAll(".domain"); // Select the axis line
+
+    // Style the tick lines
+    yAxisGroup
+      .selectAll(".tick line") // Select tick lines
+      .style("stroke", "rgb(254, 213, 116)"); // Set the tick color
+
+    svg.append(() => yAxisGroup.node());
   }, []);
 
   return <svg ref={svgRef}></svg>;

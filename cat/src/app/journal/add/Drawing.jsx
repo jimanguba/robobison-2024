@@ -24,9 +24,9 @@ export const Drawing = () => {
   useEffect(() => {
     if (canvasRef.current) {
       const initCanvas = new Canvas(canvasRef.current, {
-        height: 500,
-        width: 800,
-        backgroundColor: "#f5f5f5",
+        height: 400,
+        width: 1000,
+        backgroundColor: "white",
       });
 
       initCanvas.renderAll();
@@ -42,7 +42,7 @@ export const Drawing = () => {
   const enablePenTool = () => {
     if (canvas) {
       canvas.isDrawingMode = true; // Enable freehand drawing mode
-      brush.color = "red";
+      brush.color = "rgba(255, 153, 0, 0.25)";
       brush.width = 4;
       canvas.freeDrawingBrush = brush;
     }
@@ -111,7 +111,7 @@ export const Drawing = () => {
       const rect = new Rect({
         left: 100,
         top: 100,
-        fill: "red",
+        fill: "rgba(255, 115, 0, 0.25)",
         width: 20,
         height: 20,
       });
@@ -126,7 +126,7 @@ export const Drawing = () => {
       const circle = new Circle({
         left: 100,
         top: 100,
-        fill: "red",
+        fill: "rgba(253, 114, 0, 0.25)",
         radius: 20,
       });
 
@@ -195,7 +195,9 @@ export const Drawing = () => {
   return (
     <div>
       {/* Display the toolbar */}
-      <DrawToolBar toolInUse={toolInUse} onToolChange={onToolChange} />
+      <div className="flex justify-around items-center mb-2 w-[100%]">
+        <DrawToolBar toolInUse={toolInUse} setToolInUse={onToolChange} />
+      </div>
       <canvas id="canvas" ref={canvasRef} />
       <Modal
         open={stickerPicker}
