@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Box, Button, TextField, Menu } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ import catFace2 from "../../images/Cat-Mood2.png";
 import catFace3 from "../../images/Cat-Mood3.png";
 import catFace4 from "../../images/Cat-Mood4.png";
 import catFace5 from "../../images/Cat-Mood5.png";
+import DrawToolBar from "./DrawToolBar";
 
 function Cat({ mood }) {
   let catFace;
@@ -111,6 +112,8 @@ export default function MoodCard() {
 
   const [longAnswer, setLongAnswer] = useState("");
   const router = useRouter();
+  const [isDrawing, setIsDrawing] = useState(false);
+  const parentDrawingRef = useRef(null); // Ref to the parent of the drawing
 
   // handle close for menu dropdown
   const handleMoodPickerClose = () => {
@@ -121,6 +124,11 @@ export default function MoodCard() {
   // Text Input Change
   const handleChange = (event) => {
     setLongAnswer(event.target.value);
+  };
+
+  // Switching to drawing mode
+  const handleDrawingClick = () => {
+    setIsDrawing(!isDrawing);
   };
 
   return (
@@ -187,41 +195,126 @@ export default function MoodCard() {
             </div>
           </div>
 
-          {/* Toolbar */}
-          <div className="flex justify-around items-center mb-2">
-            <Drawing></Drawing>
+          <div
+            style={{
+              position: isDrawing ? "absolute" : "relative",
+              pointerEvents: isDrawing ? "none" : "auto", // Disable interactions if drawing
+              opacity: isDrawing ? 0 : 1, // Hide visually when drawing is active
+            }}
+            onClick={handleDrawingClick}
+          >
+            <div
+              className="flex justify-around items-center mb-2 w-[100%] bg-red"
+              style={{ pointerEvents: "none" }}
+            >
+              <DrawToolBar></DrawToolBar>
+            </div>
           </div>
 
-          <TextField
-            label="Journal"
-            placeholder="Write your thoughts..."
-            multiline
-            rows={19}
-            variant="outlined"
-            fullWidth
-            value={longAnswer}
-            onChange={handleChange}
-            sx={{
-              "& .MuiInputBase-root": {
-                fontSize: "1rem",
-                color: "#794F20",
-                backgroundColor: "#F6E1D4",
-              },
-              "& .MuiInputLabel-root": {
-                fontSize: "1.2rem",
-                color: "#AC7855",
-              },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "10px",
-                "& fieldset": { borderColor: "#E8A273" },
-                "&:hover fieldset": { borderColor: "#AC7855" },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#AC7855",
-                  borderWidth: "2px",
+          <div style={{ position: "relative" }}>
+            {/* Drawing Component */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: isDrawing ? 1 : -1, // Ensure Drawing is on top of TextField
+              }}
+            >
+              {isDrawing ? (
+                <div
+                  style={{
+                    display: "flex", // Enables flexbox
+                    flexDirection: "row", // Ensures children are laid out in a row
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start", // Aligns children to the start of the cross axis
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#6b4226",
+                      "&:hover": { backgroundColor: "#854c30" },
+                      fontFamily: "readyforfall",
+                      padding: "10px 20px",
+                      position: "absolute",
+                      top: 22,
+                    }}
+                    startIcon={<PetsIcon />}
+                    onClick={handleDrawingClick}
+                  >
+                    Writting
+                  </Button>
+                  <Drawing
+                    canvasHeight={
+                      parentDrawingRef.current
+                        ? parentDrawingRef.current.getBoundingClientRect()
+                            .height
+                        : 400
+                    }
+                    canvasWidth={
+                      parentDrawingRef.current
+                        ? parentDrawingRef.current.getBoundingClientRect().width
+                        : 1000
+                    }
+                  />{" "}
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+
+            <div
+              style={{
+                position: isDrawing ? "relative" : "absolute",
+                pointerEvents: isDrawing ? "none" : "auto", // Disable interactions if drawing
+                opacity: isDrawing ? 0 : 1, // Hide visually when drawing is active
+              }}
+              onClick={handleDrawingClick}
+            >
+              <div
+                className="flex justify-around items-center mb-2 w-[100%] bg-red"
+                style={{ pointerEvents: "none" }}
+              >
+                <DrawToolBar></DrawToolBar>
+              </div>
+            </div>
+
+            {/* TextField (underneath the Drawing component) */}
+            <TextField
+              ref={parentDrawingRef}
+              label="Journal"
+              placeholder="Write your thoughts..."
+              multiline
+              rows={19}
+              variant="outlined"
+              fullWidth
+              value={longAnswer}
+              onChange={handleChange}
+              sx={{
+                "& .MuiInputBase-root": {
+                  fontSize: "1rem",
+                  color: "#794F20",
+                  backgroundColor: "#F6E1D4",
                 },
-              },
-            }}
-          />
+                "& .MuiInputLabel-root": {
+                  fontSize: "1.2rem",
+                  color: "#AC7855",
+                },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                  "& fieldset": { borderColor: "#E8A273" },
+                  "&:hover fieldset": { borderColor: "#AC7855" },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#AC7855",
+                    borderWidth: "2px",
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
