@@ -18,6 +18,7 @@ import { getEmotion } from "../data";
 import { chartData } from "../data";
 import Image from "next/image";
 import sillyCat from "../../images/skibidi cat.png";
+import PetsIcon from "@mui/icons-material/Pets";
 
 const theme = createTheme({
   palette: {
@@ -254,7 +255,10 @@ const JournalOverview = () => {
             </Button>
 
             <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-              <Typography variant="h4"> {getMonthYear(date)}</Typography>
+              <Typography variant="h4" color="rgb(163, 209, 237)">
+                {" "}
+                {getMonthYear(date)}
+              </Typography>
             </Box>
 
             <Button
@@ -277,11 +281,14 @@ const JournalOverview = () => {
               variant="outlined"
               onClick={chartHandleOpen}
               sx={{
-                fontSize: "1rem", // Custom font size
-                height: "20px",
+                fontSize: "20px", // Custom font size
+                width: "180px",
+                borderRadius: "15px",
+                backgroundColor: "rgb(255, 244, 218)",
               }}
+              startIcon={<PetsIcon />}
             >
-              Monthly Mood Overview
+              See Chart
             </Button>
           </Box>
 
@@ -289,11 +296,24 @@ const JournalOverview = () => {
           <Modal
             open={chartModalOpen}
             onClose={chartHandleClose}
-            sx={{ backdropFilter: "blur(15px)" }}
+            sx={{
+              backdropFilter: "blur(15px)",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+            }}
           >
             <Box
-              sx={{ justifyContent: "center", m: 4 }}
-              className="flex items-center"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                m: 4,
+                backgroundColor: "rgb(255, 244, 218)",
+                borderRadius: "15px",
+                width: "92%",
+                height: "70%",
+              }}
             >
               <MoodChart data={chartData} width={1300} height={400}></MoodChart>
             </Box>
@@ -316,17 +336,27 @@ const JournalOverview = () => {
             {/* Calendar view */}
             {calendarMonth.map((day, index) => (
               <Button
-                className="flex-col text-center border rounded-sm w-auto h-32 pt-3"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  textAlign: "center",
+                  border: "0.5px solid rgb(226, 191, 108)", // Default border color, adjust as needed
+                  borderRadius: "4px", // Matches `rounded-sm`
+                  backgroundColor: "rgb(249, 241, 232)", // Matches `bg-[#FCF6F2]`
+                  width: "auto",
+                  height: "8rem", // Equivalent to `h-32`
+                  paddingTop: "0.75rem", // Equivalent to `pt-3`
+                }}
                 onClick={() => {
                   dayHandleOpen(day);
                   setSelectedDay(day);
                 }}
                 key={index}
               >
-                {day ? day.date() : ""}
+                <div className="text-2xl">{day ? day.date() : ""}</div>
                 {/* Print the emoji emotion */}
                 {day ? (
-                  <div className="text-3xl">
+                  <div className="text-3xl ">
                     {getEmotion(chartData[day.date() - 1].score)}
                   </div>
                 ) : (

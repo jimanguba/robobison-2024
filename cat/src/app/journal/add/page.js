@@ -5,7 +5,6 @@ import { Box, Button, TextField, Menu } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import { useRouter } from "next/navigation";
 import { Drawing } from "./Drawing";
-import DrawToolBar from "./DrawToolBar";
 import Image from "next/image";
 
 import catTail from "../../images/CatTail.png";
