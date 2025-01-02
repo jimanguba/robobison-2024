@@ -1,234 +1,316 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Slider, Button, TextField } from "@mui/material";
-import { Background, Cat } from "@/app/page";
+import { Box, Button, TextField, Menu } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import { useRouter } from "next/navigation";
 import { Drawing } from "./Drawing";
+import Image from "next/image";
+
+import catTail from "../../images/CatTail.png";
+import catFace1 from "../../images/Cat-Mood1.png";
+import catFace2 from "../../images/Cat-Mood2.png";
+import catFace3 from "../../images/Cat-Mood3.png";
+import catFace4 from "../../images/Cat-Mood4.png";
+import catFace5 from "../../images/Cat-Mood5.png";
 import DrawToolBar from "./DrawToolBar";
+
+function Cat({ mood }) {
+  let catFace;
+  let catTailAnimation;
+
+  switch (mood) {
+    case 1:
+      catFace = catFace1;
+      catTailAnimation = "animate-shake5";
+      break;
+    case 2:
+      catFace = catFace2;
+      catTailAnimation = "animate-shake4";
+      break;
+    case 3: //or put this to default whatever (neutral)
+      catFace = catFace3;
+      catTailAnimation = "animate-shake3";
+      break;
+    case 4:
+      catFace = catFace4;
+      catTailAnimation = "animate-shake2";
+      break;
+    case 5:
+      catFace = catFace5;
+      catTailAnimation = "animate-shake1";
+      break;
+  }
+
+  return (
+    <div className="relative h-[90%] w-[90%]s">
+      <Image
+        className="animate-wiggle h-[50%] w-[50%] relative z-10"
+        src={catFace}
+        alt="Cat face"
+      />
+
+      <Image
+        className={`absolute h-[50%] w-[50%] bottom-1 left-8 z-0 ${catTailAnimation}`}
+        src={catTail}
+        alt="Cat tail"
+      />
+    </div>
+  );
+}
+
+// Mood Picker
+function MoodPicker({ selectedMood, setSelectedMood }) {
+  const catFaces = [catFace1, catFace2, catFace3, catFace4, catFace5];
+
+  return (
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      {/* Horizontal Scrollable mood Container */}
+      <div
+        style={{
+          display: "flex",
+          overflowX: "auto", // Enable horizontal scrolling
+          whiteSpace: "nowrap", // Prevent wrapping
+          gap: "20px",
+          padding: "10px",
+
+          backgroundColor: "rgb(248, 217, 196)",
+          borderRadius: "20px",
+
+          justifyItems: "center",
+        }}
+      >
+        {catFaces.map((mood, index) => (
+          <Image
+            key={index}
+            src={mood}
+            alt={`Mood ${index}`}
+            style={{
+              width: "100px",
+              height: "100px",
+              flexShrink: 0, // Prevent shrinking of images
+              border: "1px solid rgb(247, 212, 189)",
+              // opacity: selectedMood === mood ? 0.7 : 1,
+              padding: "8px",
+              borderRadius: "10px",
+              transition: "opacity 0.3s ease",
+            }}
+            onClick={() => setSelectedMood(index + 1)} // Set selected mood on click
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function MoodCard() {
   const [moodIntensity, setMoodIntensity] = useState(3);
+  const [moodPickerOpen, setMoodPickerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const [longAnswer, setLongAnswer] = useState("");
   const router = useRouter();
   const [isDrawing, setIsDrawing] = useState(false);
   const parentDrawingRef = useRef(null); // Ref to the parent of the drawing
 
+  // handle close for menu dropdown
+  const handleMoodPickerClose = () => {
+    setMoodPickerOpen(false);
+    setAnchorEl(null);
+  };
+
+  // Text Input Change
   const handleChange = (event) => {
     setLongAnswer(event.target.value);
   };
 
-  const handleSliderChange = (event, newValue) => {
-    setMoodIntensity(newValue);
-  };
-
   // Switching to drawing mode
   const handleDrawingClick = () => {
-    setIsDrawing(true);
+    setIsDrawing(!isDrawing);
   };
-
-  const handleDrawingClose = () => {
-    setIsDrawing(false);
-  };
-
-  // The Submit Button UI
-  const SubmitButton = () => (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "20px",
-      }}
-    >
-      <Button
-        type="submit"
-        variant="contained"
-        sx={{
-          backgroundColor: "#6b4226",
-          "&:hover": { backgroundColor: "#854c30" },
-          fontFamily: "readyforfall",
-          padding: "10px 20px",
-        }}
-        startIcon={<PetsIcon />}
-      >
-        Add Cat
-      </Button>
-    </div>
-  );
 
   return (
     <div className="flex h-screen bg-[#F6E9E0] relative">
-      {/* <div className="absolute inset-0 z-1">
-        <div>
-          <Background />
-        </div>
-        <div className="flex items-center justify-center w-[5%] h-[5%]">
-          <Cat mood={moodIntensity}></Cat>
-        </div>
-      </div> */}
-      {/* Input thing */}
-      <div className="flex items-center justify-center items-center  w-[100%] h-[100%]">
-        <div className="absolute bg-[#EEDFD5] w-[90%] h-[100%] p-8 rounded-xl shadow-lg">
-          {/* <h1
-            className="text-fontColMain font-readyforfall text-5xl text-center mb-14"
-            style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
-          >
-            How is your meow~~ doing?
-          </h1>
-          <div>
-            <Slider
-              value={moodIntensity}
-              onChange={handleSliderChange}
-              step={1}
-              marks
-              min={1}
-              max={5}
-              valueLabelDisplay="on"
-              valueLabelFormat={(value) => {
-                switch (value) {
-                  case 1:
-                    return "Very Bad";
-                  case 2:
-                    return "Bad";
-                  case 3:
-                    return "Neutral";
-                  case 4:
-                    return "Good";
-                  case 5:
-                    return "Very Good";
-                  default:
-                    return value; // Fallback to the numeric value if no match
-                }
+      {/* Input Section */}
+      <div className="flex items-center justify-center w-[100%]">
+        <div className="absolute bg-[#EEDFD5] w-full lg:w-3/4 h-[95%] p-5 rounded-xl shadow-2xl border border-[rgb(228,94,4)]">
+          <div className="flex items-center justify-around w-[100%] mb-3">
+            {/* Cat Display */}
+            <div
+              className="flex justify-around items-center w-[18%]"
+              onClick={(event) => {
+                setMoodPickerOpen(!moodPickerOpen);
+                setAnchorEl(event.currentTarget);
               }}
-              sx={{
-                width: "100%",
-                mb: "14px",
-
-                "& .MuiSlider-valueLabel": {
-                  fontFamily: "readyforfall",
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                  color: "#EE9F6B",
-                  fontSize: "2rem",
-                  fontWeight: "bold",
-                  padding: 0,
-                },
-
-                "& .MuiSlider-rail": {
-                  backgroundColor: "#CEAC3D",
-                },
-                "& .MuiSlider-track": {
-                  backgroundColor: "#CEAC3D",
-                },
-                "& .MuiSlider-thumb": {
-                  backgroundColor: "#EEBC9C",
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "50%",
-                },
-                "& .MuiSlider-markLabel": {
-                  top: 30,
-                },
-              }}
-            />
-          </div> */}
-
-          <div className="mb-14">
-            <h1
-              className="text-fontColMain font-readyforfall text-5xl text-center "
-              style={{ textShadow: "2px 2px 4px rgba(121, 79, 44, 0.25)" }}
             >
+              <div className="w-[40%]"></div>
+              <Cat mood={moodIntensity} />
+              {/* MoodPicker */}
+              <Menu
+                anchorEl={anchorEl}
+                open={moodPickerOpen}
+                onClose={handleMoodPickerClose}
+                sx={{
+                  "& .MuiPaper-root": {
+                    backgroundColor: "rgb(248, 217, 196)",
+                    borderRadius: "20px",
+                    marginTop: "10px",
+                    marginLeft: "20px",
+                  },
+                }}
+              >
+                <Box>
+                  <MoodPicker
+                    selectedMood={moodIntensity}
+                    setSelectedMood={setMoodIntensity}
+                  />
+                </Box>
+              </Menu>
+            </div>
+
+            {/* Journal Section */}
+            <h1 className="text-fontColMain font-readyforfall text-5xl">
               Journal
             </h1>
-            <div className="flex-row">
-              <SubmitButton />
 
+            {/* Submit Button */}
+            <div className="flex justify-center">
               <Button
+                type="submit"
                 variant="contained"
                 sx={{
                   backgroundColor: "#6b4226",
                   "&:hover": { backgroundColor: "#854c30" },
                   fontFamily: "readyforfall",
                   padding: "10px 20px",
+                  fontSize: "1.2rem",
                 }}
                 startIcon={<PetsIcon />}
-                onClick={handleDrawingClick}
+                onClick={() => router.push("/")}
               >
-                Drawing
+                Add Journal
               </Button>
             </div>
           </div>
-          {/* Input */}
+
+          <div
+            style={{
+              position: isDrawing ? "absolute" : "relative",
+              pointerEvents: isDrawing ? "none" : "auto", // Disable interactions if drawing
+              opacity: isDrawing ? 0 : 1, // Hide visually when drawing is active
+            }}
+            onClick={handleDrawingClick}
+          >
+            <div
+              className="flex justify-around items-center mb-2 w-[100%] bg-red"
+              style={{ pointerEvents: "none" }}
+            >
+              <DrawToolBar></DrawToolBar>
+            </div>
+          </div>
+
           <div style={{ position: "relative" }}>
             {/* Drawing Component */}
             <div
               style={{
                 position: "absolute",
-                top: -70,
+                top: 0,
                 left: 0,
                 right: 0,
                 bottom: 0,
-                zIndex: 10, // Higher z-index to overlay on the TextField
+                zIndex: isDrawing ? 1 : -1, // Ensure Drawing is on top of TextField
               }}
             >
               {isDrawing ? (
-                <Drawing
-                  canvasHeight={
-                    parentDrawingRef.current.getBoundingClientRect().height
-                  }
-                  canvasWidth={
-                    parentDrawingRef.current.getBoundingClientRect().width
-                  }
-                />
+                <div
+                  style={{
+                    display: "flex", // Enables flexbox
+                    flexDirection: "row", // Ensures children are laid out in a row
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start", // Aligns children to the start of the cross axis
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#6b4226",
+                      "&:hover": { backgroundColor: "#854c30" },
+                      fontFamily: "readyforfall",
+                      padding: "10px 20px",
+                      position: "absolute",
+                      top: 22,
+                    }}
+                    startIcon={<PetsIcon />}
+                    onClick={handleDrawingClick}
+                  >
+                    Writting
+                  </Button>
+                  <Drawing
+                    canvasHeight={
+                      parentDrawingRef.current
+                        ? parentDrawingRef.current.getBoundingClientRect()
+                            .height
+                        : 400
+                    }
+                    canvasWidth={
+                      parentDrawingRef.current
+                        ? parentDrawingRef.current.getBoundingClientRect().width
+                        : 1000
+                    }
+                  />{" "}
+                </div>
               ) : (
                 <></>
               )}
             </div>
 
+            <div
+              style={{
+                position: isDrawing ? "relative" : "absolute",
+                pointerEvents: isDrawing ? "none" : "auto", // Disable interactions if drawing
+                opacity: isDrawing ? 0 : 1, // Hide visually when drawing is active
+              }}
+              onClick={handleDrawingClick}
+            >
+              <div
+                className="flex justify-around items-center mb-2 w-[100%] bg-red"
+                style={{ pointerEvents: "none" }}
+              >
+                <DrawToolBar></DrawToolBar>
+              </div>
+            </div>
+
+            {/* TextField (underneath the Drawing component) */}
             <TextField
               ref={parentDrawingRef}
               label="Journal"
-              placeholder="Write your thought"
+              placeholder="Write your thoughts..."
               multiline
-              rows={16}
+              rows={19}
               variant="outlined"
               fullWidth
               value={longAnswer}
               onChange={handleChange}
               sx={{
                 "& .MuiInputBase-root": {
-                  fontSize: "1.2rem",
+                  fontSize: "1rem",
                   color: "#794F20",
-                  backgroundColor: "#E5D0C3",
-                  "&::-webkit-scrollbar": {},
-                  height: "500px",
-                  width: "100%",
+                  backgroundColor: "#F6E1D4",
                 },
-
                 "& .MuiInputLabel-root": {
-                  fontSize: "1.3rem",
-                  color: "rgba(100, 100, 100, 0.7)",
-                  fontFamily: "Arial, sans-serif",
+                  fontSize: "1.2rem",
+                  color: "#AC7855",
                 },
-
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                  "& fieldset": {
-                    borderColor: "#E8A273",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#AC7855",
-                  },
+                  borderRadius: "10px",
+                  "& fieldset": { borderColor: "#E8A273" },
+                  "&:hover fieldset": { borderColor: "#AC7855" },
                   "&.Mui-focused fieldset": {
                     borderColor: "#AC7855",
                     borderWidth: "2px",
                   },
-                },
-
-                "& .MuiInputBase-input::placeholder": {
-                  color: "rgba(100, 100, 100, 0.7)",
-                  fontStyle: "italic",
                 },
               }}
             />
