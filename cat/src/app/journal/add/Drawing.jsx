@@ -6,8 +6,9 @@ import DrawToolBar from "./DrawToolBar";
 import { BsFillEraserFill } from "react-icons/bs";
 import ReactDOMServer from "react-dom/server";
 import "./drawing.css";
+import Settings from "./Settings";
 
-export const Drawing = () => {
+export const Drawing = ({ canvasWidth, canvasHeight }) => {
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
   const brush = new PencilBrush(canvas);
@@ -20,9 +21,9 @@ export const Drawing = () => {
   useEffect(() => {
     if (canvasRef.current) {
       const initCanvas = new Canvas(canvasRef.current, {
-        height: 400,
-        width: 1000,
-        backgroundColor: "white",
+        height: canvasHeight || 400,
+        width: canvasWidth - 15 || 1000,
+        backgroundColor: "transparent",
       });
 
       initCanvas.renderAll();
@@ -163,12 +164,14 @@ export const Drawing = () => {
   };
 
   return (
-    <div>
+    <div className="flex-col items-center h-screen w-[100%]">
       {/* Display the toolbar */}
       <div className="flex justify-around items-center mb-2 w-[100%]">
         <DrawToolBar toolInUse={toolInUse} setToolInUse={onToolChange} />
       </div>
       <canvas id="canvas" ref={canvasRef} />
+
+      <Settings canvas={canvas} />
     </div>
   );
 };
