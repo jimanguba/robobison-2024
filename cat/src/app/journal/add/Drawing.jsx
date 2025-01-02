@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { Canvas, Rect, Circle, PencilBrush } from "fabric";
+import { Canvas, Rect, Circle, PencilBrush, FabricImage } from "fabric";
 import DrawToolBar from "./DrawToolBar";
 import { BsFillEraserFill } from "react-icons/bs";
 import ReactDOMServer from "react-dom/server";
 import "./drawing.css";
+import DisplayStickers from "./DisplayStickers";
+import { Box, Modal } from "@mui/material";
+import * as fabric from "fabric";
 import Settings from "./Settings";
 
 export const Drawing = ({ canvasWidth, canvasHeight }) => {
@@ -13,7 +16,8 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
   const [canvas, setCanvas] = useState(null);
   const brush = new PencilBrush(canvas);
   const [isErasing, setIsErasing] = useState(false);
-  const [isMouseDown, setIsMouseDown] = useState(false); // Track mouse down state
+  const [stickerPicker, setStickerPicker] = useState(false);
+  const [selectedSticker, setSelectedSticker] = useState(null);
 
   // Keep the state of which tool we are choosing
   const [toolInUse, setToolInUse] = useState(2);
@@ -131,6 +135,24 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
     }
   };
 
+  // Add image
+  const addImage = (imageUrl) => {
+    console.log(imageUrl);
+
+    if (canvas) {
+      fabric.FabricImage.fromURL(imageUrl).then((image) => {
+        if (!image) {
+          console.error("Image loading failed.");
+          return;
+        }
+
+        image.scaleToWidth(100);
+        image.scaleToHeight(100);
+        canvas.add(image);
+      });
+    }
+  };
+
   // Coordinate the drawing tool
   const onToolChange = (tool) => {
     if (tool !== 5) {
@@ -139,6 +161,10 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
 
     if (tool !== 6) {
       disableEraser();
+    }
+
+    if (tool !== 7) {
+      setStickerPicker(false);
     }
 
     setToolInUse(tool);
@@ -158,6 +184,10 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
         setIsErasing(true);
         enableEraser();
         break;
+      case 7:
+        setStickerPicker(true);
+
+        break;
       default:
         break;
     }
@@ -170,6 +200,24 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
         <DrawToolBar toolInUse={toolInUse} setToolInUse={onToolChange} />
       </div>
       <canvas id="canvas" ref={canvasRef} />
+      <Modal
+        open={stickerPicker}
+        onClose={() => {
+          addImage(selectedSticker);
+          setStickerPicker(false);
+        }}
+        sx={{ backdropFilter: "blur(15px)" }}
+      >
+        <Box
+          sx={{ justifyContent: "center", m: 4 }}
+          className="flex items-center"
+        >
+          <DisplayStickers
+            selectedSticker={selectedSticker}
+            setSelectedSticker={setSelectedSticker}
+          />
+        </Box>
+      </Modal>
 
       <Settings canvas={canvas} />
     </div>
