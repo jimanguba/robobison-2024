@@ -6,103 +6,119 @@ import { RxEraser } from "react-icons/rx";
 import { TfiHandDrag } from "react-icons/tfi";
 import { LuMousePointer } from "react-icons/lu";
 
-const DrawToolBar = ({ toolInUse, onToolChange }) => {
+const DrawToolBar = ({ toolInUse, setToolInUse }) => {
+  const toolSize = 35;
+  const hightlightColor = "rgb(211, 185, 163)";
+  const toolColor = "rgb(194, 133, 92)";
+
   return (
-    <div className="flex bg-[#D4BEAF] border-[#F6B489] p-2 justify-around rounded-sm">
+    <div
+      style={{
+        display: "flex",
+        backgroundColor: "rgba(214, 141, 82, 0.25)", // Soft background for better readability
+        border: "2px solidrgb(254, 204, 170)", // Keeps the border prominent
+        justifyContent: "space-around", // Ensures even spacing
+        alignItems: "center", // Aligns items vertically
+        borderRadius: "12px", // Slightly more rounded corners for a modern look
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+        margin: "12px", // Adds some space around the toolbar
+        width: "70%",
+      }}
+    >
       <IconButton
         sx={
           toolInUse == 1
             ? {
-                backgroundColor: "#C08F6F",
+                backgroundColor: hightlightColor,
                 "&:hover": {
-                  backgroundColor: "#C08F6F",
+                  backgroundColor: hightlightColor,
                 },
               }
             : {}
         }
-        onClick={() => onToolChange(1)}
+        onClick={() => setToolInUse(1)}
       >
-        <TfiHandDrag size={40} />
+        <TfiHandDrag size={toolSize} color={toolColor} />
       </IconButton>
 
       <IconButton
         sx={
           toolInUse == 2
             ? {
-                backgroundColor: "#C08F6F",
+                backgroundColor: hightlightColor,
                 "&:hover": {
-                  backgroundColor: "#C08F6F",
+                  backgroundColor: hightlightColor,
                 },
               }
             : {}
         }
-        onClick={() => onToolChange(2)}
+        onClick={() => setToolInUse(2)}
       >
-        <LuMousePointer size={40} />
+        <LuMousePointer size={toolSize} color={toolColor} />
       </IconButton>
 
       <IconButton
         sx={
           toolInUse == 3
             ? {
-                backgroundColor: "#C08F6F",
+                backgroundColor: hightlightColor,
                 "&:hover": {
-                  backgroundColor: "#C08F6F",
+                  backgroundColor: hightlightColor,
                 },
               }
             : {}
         }
-        onClick={() => onToolChange(3)}
+        onClick={() => setToolInUse(3)}
       >
-        <LuRectangleHorizontal size={50} />
+        <LuRectangleHorizontal size={toolSize + 10} color={toolColor} />
       </IconButton>
 
       <IconButton
         sx={
           toolInUse == 4
             ? {
-                backgroundColor: "#C08F6F",
+                backgroundColor: hightlightColor,
                 "&:hover": {
-                  backgroundColor: "#C08F6F",
+                  backgroundColor: hightlightColor,
                 },
               }
             : {}
         }
-        onClick={() => onToolChange(4)}
+        onClick={() => setToolInUse(4)}
       >
-        <FaRegCircle size={40} />
+        <FaRegCircle size={toolSize} color={toolColor} />
       </IconButton>
 
       <IconButton
         sx={
           toolInUse == 5
             ? {
-                backgroundColor: "#C08F6F",
+                backgroundColor: hightlightColor,
                 "&:hover": {
-                  backgroundColor: "#C08F6F",
+                  backgroundColor: hightlightColor,
                 },
               }
             : {}
         }
-        onClick={() => onToolChange(5)}
+        onClick={() => setToolInUse(5)}
       >
-        <GoPencil size={35} />
+        <GoPencil size={toolSize} color={toolColor} />
       </IconButton>
 
       <IconButton
         sx={
           toolInUse == 6
             ? {
-                backgroundColor: "#C08F6F",
+                backgroundColor: hightlightColor,
                 "&:hover": {
-                  backgroundColor: "#C08F6F",
+                  backgroundColor: hightlightColor,
                 },
               }
             : {}
         }
-        onClick={() => onToolChange(6)}
+        onClick={() => setToolInUse(6)}
       >
-        <RxEraser size={40} />
+        <RxEraser size={toolSize} color={toolColor} />
       </IconButton>
     </div>
   );
