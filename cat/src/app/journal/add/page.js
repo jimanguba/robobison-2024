@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Menu } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import { useRouter } from "next/navigation";
+import { Drawing } from "./Drawing";
 import DrawToolBar from "./DrawToolBar";
 import Image from "next/image";
 
@@ -112,8 +113,6 @@ export default function MoodCard() {
   const [longAnswer, setLongAnswer] = useState("");
   const router = useRouter();
 
-  const [toolInUse, setToolInUse] = useState(2);
-
   // handle close for menu dropdown
   const handleMoodPickerClose = () => {
     setMoodPickerOpen(false);
@@ -191,7 +190,7 @@ export default function MoodCard() {
 
           {/* Toolbar */}
           <div className="flex justify-around items-center mb-2">
-            <DrawToolBar toolInUse={toolInUse} setToolInUse={setToolInUse} />
+            <Drawing></Drawing>
           </div>
 
           <TextField

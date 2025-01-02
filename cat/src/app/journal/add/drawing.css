@@ -1,0 +1,5 @@
+#canvas {
+  display: block;
+  width: 100%; /* or specific value */
+  height: 100%; /* or specific value */
+}
