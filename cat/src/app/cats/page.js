@@ -14,7 +14,6 @@ import PetsIcon from "@mui/icons-material/Pets";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import localFont from "next/font/local";
 import { Background } from "@/app/page";
-import Image from "next/image";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
