@@ -85,7 +85,7 @@ const JournalOverview = () => {
   // UseEffect only called once to get initial state of the calendar
   useEffect(() => {
     setCalendarMonth(
-      generateCalendarOfMonth(date.getMonth(), date.getFullYear())
+      generateCalendarOfMonth(date.getMonth() + 1, date.getFullYear())
     );
   }, []);
 
