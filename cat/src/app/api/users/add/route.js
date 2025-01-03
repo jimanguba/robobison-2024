@@ -21,26 +21,27 @@ export async function POST(req) {
     });
 
     if (existingUser) {
-      return new Response(
-        JSON.stringify({ message: "User already exists" }),
-        { status: 200 }
-      );
+      return new Response(JSON.stringify({ message: "User already exists" }), {
+        status: 200,
+      });
+    } else {
+      // Create a new user
+      const newUser = await prisma.user.create({
+        data: {
+          uid: uid,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
     }
-
-    // Create a new user
-    const newUser = await prisma.user.create({
-      data: {
-        uid: uid,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
 
     return new Response(JSON.stringify(newUser), { status: 200 });
   } catch (error) {
     console.error("Error adding user:", error);
     return new Response(
-      JSON.stringify({ error: `An error occurred while adding the user: ${error.message}` }),
+      JSON.stringify({
+        error: `An error occurred while adding the user: ${error.message}`,
+      }),
       { status: 500 }
     );
   }
