@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import localFont from "next/font/local";
 import { auth } from "@/lib/firebaseClient";
 import { Background } from "@/app/page";
+import { GoPlus } from "react-icons/go";
 
 const geistSans = localFont({
   src: "../../fonts/GeistVF.woff",
@@ -19,6 +20,15 @@ const AddCat = () => {
   const [breed, setBreed] = useState("");
   const [birthday, setBirthday] = useState("");
   const [error, setError] = useState("");
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    console.log("imageUrl updated:", imageUrl);
+  }, [uploading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +40,6 @@ const AddCat = () => {
     }
 
     try {
-      const user = auth.currentUser;
       if (!user) {
         console.error("No user is signed in");
         return;
@@ -47,6 +56,7 @@ const AddCat = () => {
           breed,
           birthday: birthday ? new Date(birthday) : null,
           ownerUid,
+          catAva: imageUrl,
         }),
       });
 
@@ -62,23 +72,71 @@ const AddCat = () => {
     }
   };
 
+  const uploadCatImage = async (file) => {
+    if (!file) {
+      alert("Please select a file first!");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      // Step 1: Get pre-signed URL
+      const response = await fetch("/api/uploadImages/pre-sign", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: "CatAva",
+          fileType: file.type,
+          uid: user.uid,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get pre-signed URL");
+      }
+
+      const { url } = await response.json();
+
+      // Step 2: Upload the file directly to S3
+      const uploadResponse = await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (uploadResponse.ok) {
+        const imageUrl1 = `${url.split("?")[0]}?timestamp=${Date.now()}`; // Extract the public S3 URL
+        setImageUrl(imageUrl1);
+      } else {
+        throw new Error("Upload failed");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading file. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <Box
       sx={{
         position: "relative",
         height: "100vh",
         display: "flex", // Flexbox for centering
-        justifyContent: "center", // Horizontal centering
-        alignItems: "center", // Vertical centering
+        justifyContent: "center",
+        alignItems: "center",
         overflow: "hidden",
       }}
     >
-      {/* Background Component */}
       <div className="absolute inset-0 z-0">
         <Background />
       </div>
 
-      {/* Foreground Content */}
       <Box
         sx={{
           position: "relative",
@@ -93,8 +151,19 @@ const AddCat = () => {
         }}
         className={geistSans.variable}
       >
-        {/* Header Section */}
-        <Box sx={{ textAlign: "center", mb: 4 }}>
+        {/* Form */}
+        <Box
+          sx={{
+            display: "flex",
+            position: "absolute",
+            top: -30, // Adjust top positioning if needed
+            left: 0,
+            right: 0,
+            textAlign: "center",
+            height: "100px", // Set height for the header area
+            width: "100%",
+          }}
+        >
           <Typography
             variant="h3"
             sx={{
@@ -102,15 +171,72 @@ const AddCat = () => {
               color: "#794F2C",
               fontFamily: "readyforfall",
             }}
+            flex={2}
           >
             Add a New Cat
           </Typography>
-          <Typography variant="h6" sx={{ color: "#8b6f47", mt: 1 }}>
-            Fill in the details below to add your new feline friend.
-          </Typography>
         </Box>
 
-        {/* Form Section */}
+        {/* Cat Ava */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center", // Ensures the content inside is centered
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center", // Ensures the content inside is centered
+              width: "20%", // Fixed width
+              height: "20%", // Fixed height
+              borderRadius: "50%", // Makes it a circle
+              mb: 3, // Adds some space below the circle
+            }}
+          >
+            <input
+              type="file"
+              id="file-input"
+              style={{ display: "none" }}
+              onChange={(event) => {
+                setFile(event.target.files[0]);
+                uploadCatImage(event.target.files[0]);
+              }}
+            />
+            <label htmlFor="file-input">
+              <Button
+                variant="contained"
+                component="span"
+                sx={{
+                  backgroundColor: "rgb(255, 255, 255)",
+                  borderRadius: "50%",
+                  padding: "0",
+                  overflow: "hidden",
+                  width: "100%", // Matches the parent circle size
+                  height: "100%", // Matches the parent circle size
+                  "&:hover": { opacity: "0.6" },
+                }}
+              >
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt="Uploaded"
+                    style={{
+                      width: "100%", // Ensures the image fits inside the circle
+                      height: "100%",
+                      objectFit: "cover", // Keeps the image aspect ratio while covering the circle
+                      borderRadius: "50%", // Ensures the image fits within the circle
+                    }}
+                  />
+                ) : (
+                  <GoPlus color="rgb(233, 201, 176)" size="100%" />
+                )}
+              </Button>
+            </label>
+          </Box>
+        </Box>
         <Box
           component="form"
           onSubmit={handleSubmit}

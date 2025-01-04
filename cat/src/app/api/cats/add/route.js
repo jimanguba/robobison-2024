@@ -1,17 +1,20 @@
 // File: /app/api/cats/add/route.js
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, breed, birthday, ownerUid } = body;
+    const { name, breed, birthday, ownerUid, catAva } = body;
 
     // Validate input
     if (!name || !ownerUid) {
-      return new Response(JSON.stringify({ error: 'Name and ownerUid are required.' }), { status: 400 });
+      return new Response(
+        JSON.stringify({ error: "Name and ownerUid are required." }),
+        { status: 400 }
+      );
     }
 
     // Create a new cat in the database
@@ -21,7 +24,9 @@ export async function POST(req) {
     });
 
     if (!userExists) {
-      return new Response(JSON.stringify({ error: 'User not found.' }), { status: 404 });
+      return new Response(JSON.stringify({ error: "User not found." }), {
+        status: 404,
+      });
     }
 
     // Create a new cat in the database
@@ -31,12 +36,16 @@ export async function POST(req) {
         breed,
         birthday,
         ownerUid,
+        catAva,
       },
     });
 
     return new Response(JSON.stringify(newCat), { status: 201 });
   } catch (error) {
-    console.error('Error adding cat:', error);
-    return new Response(JSON.stringify({ error: 'An error occurred while adding the cat.' }), { status: 500 });
+    console.error("Error adding cat:", error);
+    return new Response(
+      JSON.stringify({ error: "An error occurred while adding the cat." }),
+      { status: 500 }
+    );
   }
 }

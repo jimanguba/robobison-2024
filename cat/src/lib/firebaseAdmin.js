@@ -1,7 +1,9 @@
 import admin from "firebase-admin";
 
 // Import the service account key from an environment variable or path
-const serviceAccount = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8'));
+const serviceAccount = JSON.parse(
+  Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, "base64").toString("utf-8")
+);
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
