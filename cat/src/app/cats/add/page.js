@@ -8,6 +8,7 @@ import localFont from "next/font/local";
 import { auth } from "@/lib/firebaseClient";
 import { Background } from "@/app/page";
 import { GoPlus } from "react-icons/go";
+import { defaultCatProfilePic } from "../data";
 
 const geistSans = localFont({
   src: "../../fonts/GeistVF.woff",
@@ -22,13 +23,32 @@ const AddCat = () => {
   const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(defaultCatProfilePic);
+  const [uniqueDate, setUniqueDate] = useState("");
 
   const user = auth.currentUser;
 
+  // Hash current timestamp to make it the ava folder
+  const hashDate = async (dateString) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(dateString);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+
+    // Convert hash to a hexadecimal string
+    return Array.from(new Uint8Array(hash))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  };
+
   useEffect(() => {
-    console.log("imageUrl updated:", imageUrl);
-  }, [uploading]);
+    const hash = async () => {
+      let uniqueDate = await hashDate(new Date().toISOString());
+      setUniqueDate(uniqueDate);
+      return uniqueDate;
+    };
+
+    hash();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +107,7 @@ const AddCat = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fileName: "CatAva",
+          fileName: `CatAva-${uniqueDate}`,
           fileType: file.type,
           uid: user.uid,
         }),
@@ -273,19 +293,28 @@ const AddCat = () => {
               {error}
             </Typography>
           )}
-          <Button
-            type="submit"
-            variant="contained"
+          <Box
             sx={{
-              backgroundColor: "#6b4226",
-              "&:hover": { backgroundColor: "#854c30" },
-              fontFamily: "readyforfall",
-              padding: "10px 20px",
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
             }}
-            startIcon={<PetsIcon />}
           >
-            Add Cat
-          </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#6b4226",
+                "&:hover": { backgroundColor: "#854c30" },
+                fontFamily: "readyforfall",
+                padding: "10px 20px",
+                fontSize: "1.2rem",
+              }}
+              startIcon={<PetsIcon />}
+            >
+              Add Cat
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>
