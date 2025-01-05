@@ -3,3 +3,8 @@
   width: 100%; /* or specific value */
   height: 100%; /* or specific value */
 }
+
+/* Hide the HEX and RGB inputs in the color picker */
+.react-colorful__inputs {
+  display: none !important;
+}

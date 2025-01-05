@@ -6,6 +6,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import { useRouter } from "next/navigation";
 import { Drawing } from "./Drawing";
 import Image from "next/image";
+import { FaPen } from "react-icons/fa";
 
 import catTail from "../../images/CatTail.png";
 import catFace1 from "../../images/Cat-Mood1.png";
@@ -134,8 +135,16 @@ export default function MoodCard() {
   return (
     <div className="flex h-screen bg-[#F6E9E0] relative">
       {/* Input Section */}
-      <div className="flex items-center justify-center w-[100%]">
-        <div className="absolute bg-[#EEDFD5] w-full lg:w-3/4 h-[95%] p-5 rounded-xl shadow-2xl border border-[rgb(228,94,4)]">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: !isDrawing && "center",
+          width: "100%",
+          marginLeft: isDrawing && "5%",
+        }}
+      >
+        <div className="flex-col bg-[#EEDFD5] w-full lg:w-3/4 h-[95%] p-5 rounded-xl shadow-2xl border border-[rgb(228,94,4)]">
           <div className="flex items-center justify-around w-[100%] mb-3">
             {/* Cat Display */}
             <div
@@ -176,7 +185,14 @@ export default function MoodCard() {
             </h1>
 
             {/* Submit Button */}
-            <div className="flex justify-center">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column", // Equivalent to "flex-col"
+                justifyContent: "center", // Equivalent to "justify-center"
+                gap: "10px", // Equivalent to "gap-20" (Tailwind's 20 = 5rem)
+              }}
+            >
               <Button
                 type="submit"
                 variant="contained"
@@ -184,13 +200,27 @@ export default function MoodCard() {
                   backgroundColor: "#6b4226",
                   "&:hover": { backgroundColor: "#854c30" },
                   fontFamily: "readyforfall",
-                  padding: "10px 20px",
-                  fontSize: "1.2rem",
+                  padding: "10px 15px",
+                  fontSize: "0.8rem",
                 }}
                 startIcon={<PetsIcon />}
                 onClick={() => router.push("/")}
               >
                 Add Journal
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#6b4226",
+                  "&:hover": { backgroundColor: "#854c30" },
+                  fontFamily: "readyforfall",
+                  padding: "10px 15px",
+                  fontSize: "0.8rem",
+                }}
+                startIcon={<PetsIcon />}
+                onClick={handleDrawingClick}
+              >
+                {isDrawing ? "Writing" : "Drawing"}
               </Button>
             </div>
           </div>
@@ -204,7 +234,7 @@ export default function MoodCard() {
             onClick={handleDrawingClick}
           >
             <div
-              className="flex justify-around items-center mb-2 w-[100%] bg-red"
+              className="flex justify-around items-center mb-2 w-[100%] "
               style={{ pointerEvents: "none" }}
             >
               <DrawToolBar></DrawToolBar>
@@ -217,7 +247,7 @@ export default function MoodCard() {
               style={{
                 position: "absolute",
                 top: 0,
-                left: 0,
+                left: -80,
                 right: 0,
                 bottom: 0,
                 zIndex: isDrawing ? 1 : -1, // Ensure Drawing is on top of TextField
@@ -230,23 +260,9 @@ export default function MoodCard() {
                     flexDirection: "row", // Ensures children are laid out in a row
                     justifyContent: "flex-start",
                     alignItems: "flex-start", // Aligns children to the start of the cross axis
+                    position: "relative", // Necessary for positioning the Drawing component
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#6b4226",
-                      "&:hover": { backgroundColor: "#854c30" },
-                      fontFamily: "readyforfall",
-                      padding: "10px 20px",
-                      position: "absolute",
-                      top: 22,
-                    }}
-                    startIcon={<PetsIcon />}
-                    onClick={handleDrawingClick}
-                  >
-                    Writting
-                  </Button>
                   <Drawing
                     canvasHeight={
                       parentDrawingRef.current
@@ -259,7 +275,7 @@ export default function MoodCard() {
                         ? parentDrawingRef.current.getBoundingClientRect().width
                         : 1000
                     }
-                  />{" "}
+                  />
                 </div>
               ) : (
                 <></>
@@ -275,7 +291,7 @@ export default function MoodCard() {
               onClick={handleDrawingClick}
             >
               <div
-                className="flex justify-around items-center mb-2 w-[100%] bg-red"
+                className="flex justify-center items-center mb-2 w-[100%]"
                 style={{ pointerEvents: "none" }}
               >
                 <DrawToolBar></DrawToolBar>

@@ -7,7 +7,7 @@ import { BsFillEraserFill } from "react-icons/bs";
 import ReactDOMServer from "react-dom/server";
 import "./drawing.css";
 import DisplayStickers from "./DisplayStickers";
-import { Box, Modal } from "@mui/material";
+import { Box, Menu, Modal } from "@mui/material";
 import * as fabric from "fabric";
 import Settings from "./Settings";
 
@@ -18,6 +18,7 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
   const [isErasing, setIsErasing] = useState(false);
   const [stickerPicker, setStickerPicker] = useState(false);
   const [selectedSticker, setSelectedSticker] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   // Keep the state of which tool we are choosing
   const [toolInUse, setToolInUse] = useState(2);
@@ -26,7 +27,7 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
     if (canvasRef.current) {
       const initCanvas = new Canvas(canvasRef.current, {
         height: canvasHeight || 400,
-        width: canvasWidth - 15 || 1000,
+        width: canvasWidth - 50 || 1000,
         backgroundColor: "transparent",
       });
 
@@ -113,8 +114,11 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
         left: 100,
         top: 100,
         fill: "rgba(255, 115, 0, 0.25)",
-        width: 20,
-        height: 20,
+        width: 50,
+        height: 50,
+        stroke: "black",
+        strokeWidth: 1 / 25,
+        strokeDashArray: [1, 1],
       });
 
       canvas.add(rect);
@@ -128,7 +132,9 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
         left: 100,
         top: 100,
         fill: "rgba(253, 114, 0, 0.25)",
-        radius: 20,
+        radius: 40,
+        stroke: "black",
+        strokeWidth: 1 / 25,
       });
 
       canvas.add(circle);
@@ -148,6 +154,12 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
 
         image.scaleToWidth(100);
         image.scaleToHeight(100);
+
+        image.set({
+          left: 200,
+          top: 200,
+        });
+
         canvas.add(image);
       });
     }
@@ -194,32 +206,64 @@ export const Drawing = ({ canvasWidth, canvasHeight }) => {
   };
 
   return (
-    <div className="flex-col items-center h-screen w-[100%]">
-      {/* Display the toolbar */}
-      <div className="flex justify-around items-center mb-2 w-[100%]">
-        <DrawToolBar toolInUse={toolInUse} setToolInUse={onToolChange} />
-      </div>
-      <canvas id="canvas" ref={canvasRef} />
-      <Modal
-        open={stickerPicker}
-        onClose={() => {
-          addImage(selectedSticker);
-          setStickerPicker(false);
+    <div className="flex relative h-[100%] w-full">
+      {/* Settings (absolute) */}
+      <div
+        style={{
+          position: "absolute",
+          right: "-400px",
+          top: "-100px",
+          padding: "16px",
+          margin: "16px",
+          width: "30%",
         }}
-        sx={{ backdropFilter: "blur(15px)" }}
       >
-        <Box
-          sx={{ justifyContent: "center", m: 4 }}
-          className="flex items-center"
+        <Settings canvas={canvas} />
+      </div>
+
+      {/* Drawing space (takes full width, Settings overlays it) */}
+      <div className="flex flex-col items-center h-full w-full">
+        {/* Toolbar */}
+        <div
+          className="flex justify-around items-center mb-2 w-full"
+          onClick={(event) => {
+            setAnchorEl(event.currentTarget);
+          }}
+        >
+          <DrawToolBar toolInUse={toolInUse} setToolInUse={onToolChange} />
+        </div>
+
+        {/* Canvas */}
+        <canvas
+          id="canvas"
+          ref={canvasRef}
+          style={{
+            border: "none", // No visible border
+          }}
+        />
+
+        {/* Modal for sticker picker */}
+        <Menu
+          anchorEl={anchorEl}
+          open={stickerPicker}
+          onClose={() => {
+            addImage(selectedSticker);
+            setStickerPicker(false);
+          }}
+          PaperProps={{
+            sx: {
+              backgroundColor: "transparent", // Fully transparent background
+              boxShadow: "none", // Remove shadow
+              padding: 0, // Optional: Remove padding
+            },
+          }}
         >
           <DisplayStickers
             selectedSticker={selectedSticker}
             setSelectedSticker={setSelectedSticker}
           />
-        </Box>
-      </Modal>
-
-      <Settings canvas={canvas} />
+        </Menu>
+      </div>
     </div>
   );
 };
