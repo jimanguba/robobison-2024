@@ -123,128 +123,166 @@ export default function NotificationButton() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Request notification permission and register service worker when enabling notifications
-  const enableNotifications = async () => {
-    console.log("Current notification permission:", Notification.permission);
+  // // Request notification permission and register service worker when enabling notifications
+  // const enableNotifications = async () => {
+  //   console.log("Current notification permission:", Notification.permission);
 
-    try {
-      console.log("Requesting notification permission...");
-      const permission = await Notification.requestPermission();
-      console.log("Notification permission:", permission);
+  //   try {
+  //     console.log("Requesting notification permission...");
+  //     const permission = await Notification.requestPermission();
+  //     console.log("Notification permission:", permission);
 
-      if (permission === "granted") {
-        const registration = await navigator.serviceWorker.register(
-          "/firebase-messaging-sw.js",
-          { scope: "/" }
-        );
-        console.log("Service Worker registered:", registration);
+  //     if (permission === "granted") {
+  //       const registration = await navigator.serviceWorker.register(
+  //         "/firebase-messaging-sw.js",
+  //         { scope: "/" }
+  //       );
+  //       console.log("Service Worker registered:", registration);
 
-        const token = await getToken(messaging, {
-          vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
-          serviceWorkerRegistration: registration,
-        });
+  //       const token = await getToken(messaging, {
+  //         vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+  //         serviceWorkerRegistration: registration,
+  //       });
 
-        if (token && user) {
-          // Save the FCM token to Supabase for the authenticated user
-          const { error } = await supabase
-            .from("User")
-            .update({ fcmToken: token })
-            .eq("uid", user.uid);
+  //       if (token && user) {
+  //         // Save the FCM token to Supabase for the authenticated user
+  //         const { error } = await supabase
+  //           .from("User")
+  //           .update({ fcmToken: token })
+  //           .eq("uid", user.uid);
 
-          if (error) {
-            console.error("Error saving FCM token to Supabase:", error);
-          } else {
-            console.log("FCM token saved to Supabase successfully");
-          }
+  //         if (error) {
+  //           console.error("Error saving FCM token to Supabase:", error);
+  //         } else {
+  //           console.log("FCM token saved to Supabase successfully");
+  //         }
 
-          setNotificationsEnabled(true);
-          // In onMessage callback within enableNotifications:
-          onMessage(messaging, async (payload) => {
-            console.log("Foreground message received: ", payload);
-            const newNotification = {
-              title: payload.notification?.title,
-              message: payload.notification?.body,
-              userUid: user.uid,
-              isRead: false, // Initially, the notification is unread
-              createdAt: new Date().toISOString(), // Use ISO format for storing in DB
-            };
+  //         setNotificationsEnabled(true);
+  //         // In onMessage callback within enableNotifications:
+  //         onMessage(messaging, async (payload) => {
+  //           console.log("Foreground message received: ", payload);
+  //           const newNotification = {
+  //             title: payload.notification?.title,
+  //             message: payload.notification?.body,
+  //             userUid: user.uid,
+  //             isRead: false, // Initially, the notification is unread
+  //             createdAt: new Date().toISOString(), // Use ISO format for storing in DB
+  //           };
 
-            // Show toast notification
-            toast.info(`${newNotification.title}: ${newNotification.message}`, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+  //           // Show toast notification
+  //           toast.info(`${newNotification.title}: ${newNotification.message}`, {
+  //             position: "top-right",
+  //             autoClose: 5000,
+  //             hideProgressBar: false,
+  //             closeOnClick: true,
+  //             pauseOnHover: true,
+  //             draggable: true,
+  //             progress: undefined,
+  //           });
 
-            // Add to local state
-            setNotifications((prev) => [newNotification, ...prev]);
+  //           // Add to local state
+  //           setNotifications((prev) => [newNotification, ...prev]);
 
-            // Save to Supabase
-            const { error: insertError } = await supabase
-              .from("notifications")
-              .insert(newNotification);
+  //           // Save to Supabase
+  //           const { error: insertError } = await supabase
+  //             .from("notifications")
+  //             .insert(newNotification);
 
-            if (insertError) {
-              console.error(
-                "Error saving notification to Supabase:",
-                insertError
-              );
-            } else {
-              console.log("Notification saved to Supabase successfully");
-            }
-          });
-        }
-      } else {
-        setNotificationsEnabled(false);
-      }
-    } catch (error) {
-      console.error("Error during notification setup:", error);
-    }
-  };
+  //           if (insertError) {
+  //             console.error(
+  //               "Error saving notification to Supabase:",
+  //               insertError
+  //             );
+  //           } else {
+  //             console.log("Notification saved to Supabase successfully");
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       setNotificationsEnabled(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during notification setup:", error);
+  //   }
+  // };
 
   // Schedule a notification to trigger after 30 seconds
-const scheduleNotification = () => {
-  console.log("Scheduling notification for 30 seconds later...");
+  const scheduleNotification = () => {
+    console.log("Scheduling notification for 30 seconds later...");
 
-  const newNotification = {
-    title: "Scheduled Notification",
-    message: "This notification was scheduled 30 seconds ago.",
-    userUid: user?.uid || "Unknown",
-    isRead: false,
-    createdAt: new Date().toISOString(),
+    const newNotification = {
+      title: "Scheduled Notification",
+      message: "This notification was scheduled 30 seconds ago.",
+      userUid: user?.uid || "Unknown",
+      isRead: false,
+      createdAt: new Date().toISOString(),
+    };
+
+    const localScheduledTime = new Date(new Date().getTime() + 30 * 1000); // 30 seconds from now in local time
+    console.log(
+      "Scheduled to trigger at local time:",
+      localScheduledTime.toLocaleString()
+    );
+
+    setTimeout(() => {
+      console.log(
+        "Triggering scheduled notification at local time:",
+        new Date().toLocaleString()
+      );
+      console.log(
+        "Triggering scheduled notification at UTC time:",
+        new Date().toISOString()
+      );
+
+      // Show toast notification
+      toast.info(`${newNotification.title}: ${newNotification.message}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+      // Add to local state
+      setNotifications((prev) => [newNotification, ...prev]);
+    }, 30000); // 30 seconds delay
   };
-
-  const localScheduledTime = new Date(new Date().getTime() + 30 * 1000); // 30 seconds from now in local time
-  console.log("Scheduled to trigger at local time:", localScheduledTime.toLocaleString());
-  
-  setTimeout(() => {
-    console.log("Triggering scheduled notification at local time:", new Date().toLocaleString());
-    console.log("Triggering scheduled notification at UTC time:", new Date().toISOString());
-
-    // Show toast notification
-    toast.info(`${newNotification.title}: ${newNotification.message}`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-
-    // Add to local state
-    setNotifications((prev) => [newNotification, ...prev]);
-  }, 30000); // 30 seconds delay
-};
-
 
   if (!user) {
     return null;
   }
+
+  // Fetch notifications from fastapi server
+  const fetchNotifications = async () => {
+    try {
+      const notificationData = {
+        schedule: 10,
+        title: "Meeting Reminder",
+        message: "Don't forget the team meeting at 3 PM.",
+        recipient: "user@example.com",
+      };
+
+      const response = await fetch("http://127.0.0.1:8000/send-notification/", {
+        method: "POST", // Specify the HTTP method
+        headers: {
+          "Content-Type": "application/json", // Inform the server that the body is JSON
+        },
+        body: JSON.stringify(notificationData), // Convert the JavaScript object to JSON
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch notifications");
+      }
+
+      const data = await response.json();
+      alert(data.message);
+      // setNotifications(data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
 
   return (
     <div className={styles.floatingButtonContainer}>
@@ -260,16 +298,8 @@ const scheduleNotification = () => {
         <div className={styles.dropdown} ref={dropdownRef}>
           <div className={styles.dropdownHeader}>
             <span>Notifications</span>
-            <button
-              onClick={enableNotifications}
-              className={styles.toggleButton}
-            >
-              {notificationsEnabled ? "Turn Off" : "Turn On"}
-            </button>
-            <button
-              onClick={scheduleNotification}
-              className={styles.testButton}
-            >
+
+            <button onClick={fetchNotifications} className={styles.testButton}>
               Schedule Test Notification
             </button>
           </div>
