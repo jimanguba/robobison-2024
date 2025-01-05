@@ -351,9 +351,6 @@ const CatsList = () => {
             </Button>
           </Link>
         </Box>
-        <Box>
-          <Notification />
-        </Box>
       </Box>
     </ThemeProvider>
   );

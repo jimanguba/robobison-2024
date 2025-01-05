@@ -2,7 +2,7 @@ let notifications = [];
 
 export async function POST(req) {
   try {
-    const { title, message, sender, recipient } = await req.json();
+    const { title, message, sender, recipient, userId } = await req.json();
 
     if (!sender) {
       return new Response(
@@ -12,7 +12,12 @@ export async function POST(req) {
     }
 
     if (sender === "noti-server") {
-      notifications.push({ title, message });
+      if (recipient in notifications) {
+        notifications[recipient].push({ title, message });
+      } else {
+        notifications[recipient] = [{ title, message }];
+      }
+
       return new Response(
         JSON.stringify({
           messageServer: "Notification received by server.",
@@ -23,7 +28,7 @@ export async function POST(req) {
     }
 
     if (sender === "client") {
-      if (notifications.length === 0) {
+      if (notifications[userId].length === 0 || !userId) {
         return new Response(JSON.stringify({ error: "No notifications" }), {
           status: 400,
           headers: { "Content-Type": "application/json" },
@@ -31,7 +36,7 @@ export async function POST(req) {
       }
 
       // Notification to send back as we have some
-      const curr_noti = notifications.shift();
+      const curr_noti = notifications[userId].shift();
 
       return new Response(
         JSON.stringify({
@@ -41,11 +46,6 @@ export async function POST(req) {
         { status: 200, headers: { "Content-Type": "application/json" } }
       );
     }
-
-    return new Response(
-      JSON.stringify({ title: title, message: message, recipient: recipient }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
   } catch (error) {
     return new Response(JSON.stringify({ error: "Invalid request body." }), {
       status: 400,

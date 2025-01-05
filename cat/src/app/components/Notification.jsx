@@ -66,7 +66,7 @@ const Notification = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ sender: "client" }),
+          body: JSON.stringify({ sender: "client", userId: user.uid }),
         });
 
         // if (!response.ok) throw new Error("Failed to fetch notifications");
@@ -86,15 +86,15 @@ const Notification = () => {
   }, [user]);
 
   // Notification card styles
-  const cardHoverEffect = (isHover) => ({
-    backgroundColor: isHover ? "rgba(0, 0, 0, 0.05)" : "#fff",
+  const cardHoverEffect = () => ({
+    backgroundColor: "#fff",
     border: "1px solid rgba(0, 0, 0, 0.15)",
     borderRadius: "18px",
     padding: "15px",
     margin: "10px 0",
     transition: "transform 0.2s, box-shadow 0.2s",
-    transform: isHover ? "translateY(-5px)" : "none",
-    boxShadow: isHover ? "0 6px 10px rgba(0, 0, 0, 0.15)" : "none",
+    transform: "none",
+    boxShadow: "none",
   });
 
   if (loading) {
