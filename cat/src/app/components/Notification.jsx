@@ -2,10 +2,48 @@ import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebaseClient";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Box, CircularProgress } from "@mui/material";
+import dayjs from "dayjs";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
   const [user, loading] = useAuthState(auth); // Use react-firebase-hooks for auth state
+
+  function getRelativeTimeString(dateInput) {
+    const now = dayjs();
+    const inputDate = dayjs(dateInput);
+
+    // Calculate differences
+    const diffInSeconds = now.diff(inputDate, "second"); // total seconds difference
+    const diffInMinutes = now.diff(inputDate, "minute"); // total minutes difference
+    const diffInHours = now.diff(inputDate, "hour"); // total hours difference
+    const diffInDays = now.diff(inputDate, "day"); // total days difference
+    const diffInWeeks = now.diff(inputDate, "week"); // total weeks difference
+    const diffInMonths = now.diff(inputDate, "month"); // total months difference
+
+    if (diffInSeconds < 60) {
+      // Less than a minute
+      return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;
+    } else if (diffInMinutes < 60) {
+      // Less than an hour
+      return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
+    } else if (diffInHours < 24) {
+      // Less than a day
+      return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
+    } else if (diffInDays < 7) {
+      // Less than a week
+      return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
+    } else if (diffInWeeks < 5) {
+      // Less than about a month
+      return `${diffInWeeks} week${diffInWeeks === 1 ? "" : "s"} ago`;
+    } else if (diffInMonths < 12) {
+      // Less than a year
+      return `${diffInMonths} month${diffInMonths === 1 ? "" : "s"} ago`;
+    } else {
+      // More than a year ago
+      const diffInYears = now.diff(inputDate, "year");
+      return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
+    }
+  }
 
   // Fetch old notifications when the user is authenticated
   useEffect(() => {
@@ -160,6 +198,15 @@ const Notification = () => {
                 }}
               >
                 {noti.message}
+              </p>
+              <p
+                style={{
+                  fontSize: "16px",
+                  margin: "5px 0 0",
+                  color: "rgb(129, 88, 50)",
+                }}
+              >
+                {getRelativeTimeString(noti.createdAt)}
               </p>
             </div>
           ))}
