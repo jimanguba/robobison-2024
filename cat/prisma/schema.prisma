@@ -36,7 +36,7 @@ model Cat {
   ownerUid       String         // Foreign key to User (Firebase uid)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
-
+  catAva         String         @default("")
   // Relations
   owner          User           @relation(fields: [ownerUid], references: [uid])
   journalEntries JournalEntry[]
