@@ -18,36 +18,36 @@ const LogIn = () => {
 
   const router = useRouter();
 
-  const addUserToDatabase = async (user) => {
-    try {
-      // The body should be a simple JSON object with only the uid
-      console.log("user in addUserToDatabase", user);
-      const response = await fetch("/api/users/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: user.uid, // Only the UID is provided from Firebase Auth
-        }),
-      });
+  // const addUserToDatabase = async (user) => {
+  //   try {
+  //     // The body should be a simple JSON object with only the uid
+  //     console.log("user in addUserToDatabase", user);
+  //     const response = await fetch("/api/users/add", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         uid: user.uid, // Only the UID is provided from Firebase Auth
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        console.error("Failed to add user to the database");
-      }
+  //     if (!response.ok) {
+  //       console.error("Failed to add user to the database");
+  //     }
 
-      console.log("User added to database successfully");
-    } catch (error) {
-      console.error("Error adding user to the database:", error);
-      setError("Failed to save user information. Please try again.");
-    }
-  };
+  //     console.log("User added to database successfully");
+  //   } catch (error) {
+  //     console.error("Error adding user to the database:", error);
+  //     setError("Failed to save user information. Please try again.");
+  //   }
+  // };
 
   // Redirect to homepage if user is already logged in
   useEffect(() => {
     if (user) {
       router.push("/cats");
-      addUserToDatabase(user);
+      // addUserToDatabase(user);
     }
   }, [user]);
 
@@ -59,7 +59,7 @@ const LogIn = () => {
       const res = await signInWithEmailAndPassword(auth, email, password);
       console.log(res);
       // Add the user to the database
-      await addUserToDatabase(res);
+      // await addUserToDatabase(res);
 
       // Clear the form
       setEmail("");
