@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getMessaging } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,13 +12,48 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-const auth = getAuth(app);
-
+let app;
+let auth;
 let messaging;
+
 if (typeof window !== "undefined") {
-  messaging = getMessaging(app);
+  // Initialize Firebase app only if running in a browser
+  app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+  // Initialize Firebase services
+  auth = getAuth(app);
+
+  try {
+    messaging = getMessaging(app);
+  } catch (error) {
+    console.warn(
+      "Firebase Messaging is not supported in this environment:",
+      error.message
+    );
+  }
 }
+
+// Function to generate FCM token
+export const generateToken = async () => {
+  if (typeof window === "undefined") return;
+
+  const permission = await Notification.requestPermission();
+  console.log(`Notification permission: ${permission}`);
+
+  if (permission === "granted" && messaging) {
+    try {
+      const token = await getToken(messaging, {
+        vapidKey:
+          "BJv-iWtya0Az2rdM-ubxrb9lsjXASOyykjenOBBOA7XnMxaQzSp8vMwWTm2pA9nps4feW7KOLcPSkI7avvA8pQc",
+      });
+      console.log("FCM Token:", token);
+      return token;
+    } catch (error) {
+      console.error("Error getting FCM token:", error);
+    }
+  } else {
+    console.warn("Notification permission denied or Messaging is unavailable");
+  }
+};
 
 export { app, auth, messaging };

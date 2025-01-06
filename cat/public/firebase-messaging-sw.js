@@ -27,24 +27,35 @@ messaging.onBackgroundMessage(function (payload) {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.image,
+    icon: payload.notification.image || "/default-icon.png",
   };
 
   // Show the notification in the browser
   self.registration.showNotification(notificationTitle, notificationOptions);
 
   // Broadcast the notification data to all clients (i.e., open tabs)
-  self.clients
-    .matchAll({ type: "window", includeUncontrolled: true })
-    .then(function (clients) {
-      clients.forEach(function (client) {
-        const broadcastPayload = {
-          notification: {
-            title: payload.notification.title,
-            body: payload.notification.body,
-          }
-        };
-        client.postMessage(broadcastPayload);
-      });
-    });
+  // self.clients
+  //   .matchAll({ type: "window", includeUncontrolled: true })
+  //   .then(function (clients) {
+  //     clients.forEach(function (client) {
+  //       const broadcastPayload = {
+  //         notification: {
+  //           title: payload.notification.title,
+  //           body: payload.notification.body,
+  //         }
+  //       };
+  //       client.postMessage(broadcastPayload);
+  //     });
+  //   });
 });
+
+// self.addEventListener("message", (event) => {
+//   const { type, data } = event.data;
+//   if(type = "showNotification") {
+//     const {title, body, icon}= data;
+//     self.registration.showNotification(title, {
+//       body: body,
+//       icon: icon || "/default-icon.png"
+//     })
+//   }
+// });

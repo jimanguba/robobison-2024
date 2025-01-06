@@ -17,6 +17,9 @@ import catFace2 from "./images/Cat-Mood2.png";
 import catFace3 from "./images/Cat-Mood3.png";
 import catFace4 from "./images/Cat-Mood4.png";
 import catFace5 from "./images/Cat-Mood5.png";
+import { useEffect } from "react";
+import { generateToken, messaging } from "@/lib/firebaseClient";
+import { onMessage } from "firebase/messaging";
 
 export function Cat({ mood }) {
   let catFace;

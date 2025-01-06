@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { getToken, onMessage } from "firebase/messaging";
-import { auth, messaging } from "@/lib/firebaseClient";
+import { auth, generateToken, messaging } from "@/lib/firebaseClient";
 import { onAuthStateChanged } from "firebase/auth";
 import Message from "./Message";
 import styles from "../../styles/NotificationButton.module.css";
@@ -25,6 +25,15 @@ export default function NotificationButton() {
   }, [user]);
 
   // Monitor the authentication state
+  
+  useEffect(() => {
+    generateToken();
+    onMessage(messaging, (payload) => {
+      console.log(payload);
+      // toast(payload.notification.body)
+    })
+  }, [])
+
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -170,15 +179,15 @@ export default function NotificationButton() {
             };
 
             // Show toast notification
-            toast.info(`${newNotification.title}: ${newNotification.message}`, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            // toast.info(`${newNotification.title}: ${newNotification.message}`, {
+            //   position: "top-right",
+            //   autoClose: 5000,
+            //   hideProgressBar: false,
+            //   closeOnClick: true,
+            //   pauseOnHover: true,
+            //   draggable: true,
+            //   progress: undefined,
+            // });
 
             // Add to local state
             setNotifications((prev) => [newNotification, ...prev]);
@@ -226,15 +235,15 @@ const scheduleNotification = () => {
     console.log("Triggering scheduled notification at UTC time:", new Date().toISOString());
 
     // Show toast notification
-    toast.info(`${newNotification.title}: ${newNotification.message}`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    // toast.info(`${newNotification.title}: ${newNotification.message}`, {
+    //   position: "top-right",
+    //   autoClose: 5000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    // });
 
     // Add to local state
     setNotifications((prev) => [newNotification, ...prev]);
@@ -266,12 +275,12 @@ const scheduleNotification = () => {
             >
               {notificationsEnabled ? "Turn Off" : "Turn On"}
             </button>
-            <button
+            {/* <button
               onClick={scheduleNotification}
               className={styles.testButton}
             >
               Schedule Test Notification
-            </button>
+            </button> */}
           </div>
           {notifications.length > 0 ? (
             notifications.map((notification, index) => (
