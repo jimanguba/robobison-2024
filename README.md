@@ -4,7 +4,7 @@
 
 <table>
   <tbody><tr>
-        <td align="center"><a href="https://www.linkedin.com/in/dakshinapalasamudrum/"><img alt="Kha Tran" src="https://res.cloudinary.com/khoa165/image/upload/v1711823667/viettech/kha.jpg" width="100px;"><br><sub><b>Kha Tran</b></sub><br><sub><a href="https://github.com/ComTDK">@ComTDK</a></sub></a><br></td>
+        <td align="center"><a href="https://www.linkedin.com/in/duy-kha-tran-b53a43279/"><img alt="Kha Tran" src="https://res.cloudinary.com/khoa165/image/upload/v1711823667/viettech/kha.jpg" width="100px;"><br><sub><b>Kha Tran</b></sub><br><sub><a href="https://github.com/ComTDK">@ComTDK</a></sub></a><br></td>
         <td align="center"><a href="https://www.linkedin.com/in/jillianmanguba24/"><img alt="Jillian Manguba" src="cat\src\app\images\people\jillianPFP.jpeg" width="100px;"><br><sub><b>Jillian Manguba</b></sub><br><sub><a href="https://github.com/jimanguba/">@jimanguba</a></sub></a><br></td>
         <td align="center"><a href="https://www.linkedin.com/in/ashleydaviskosasih/"><img alt="Ashley Davis" src="cat\src\app\images\people\ashleyPFP.jpeg" width="100px;"><br><sub><b>Ashley Davis</b></sub><br><sub><a href="https://github.com/ashleydvss">@ashleydvss</a></sub></a><br></td>
 
