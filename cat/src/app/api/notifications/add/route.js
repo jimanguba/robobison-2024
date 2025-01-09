@@ -4,25 +4,15 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { userUid, title, message, reminderTime } = body;
+    const { userUid, title, message } = body;
 
     // Validate the required fields
-    if (!userUid || !title || !message || !reminderTime) {
+    if (!userUid || !title || !message) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
-
-    // Validate reminderTime is a valid date
-    const parsedReminderTime = new Date(reminderTime);
-    if (isNaN(parsedReminderTime.getTime())) {
-      return NextResponse.json(
-        { error: "Invalid reminder time provided" },
-        { status: 400 }
-      );
-    }
-    const reminderTimeUTC = new Date(parsedReminderTime.toISOString());
 
     // Check if the user exists
     const user = await prisma.user.findUnique({
@@ -42,7 +32,7 @@ export async function POST(req) {
         title: title,
         message: message,
         isRead: false,
-        reminderTime: reminderTimeUTC, // Ensure reminderTime is a Date object in UTC
+        reminderTime: new Date(), // You can set the reminder time as needed
       },
     });
 
