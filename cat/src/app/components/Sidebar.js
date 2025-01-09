@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import {
   Drawer,
@@ -6,10 +7,9 @@ import {
   ListItem,
   ListItemText,
   Typography,
-  IconButton,
+  Fab,
   Divider,
   Box,
-  Fab,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
@@ -20,6 +20,9 @@ import React, { useState, useEffect } from "react";
 
 import localFont from "next/font/local";
 import { FavoriteBorder } from "@mui/icons-material";
+
+import { onAuthStateChanged, signOut } from "firebase/auth"; // Import Firebase methods
+import { auth } from "@/lib/firebaseClient";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -32,24 +35,35 @@ const geistMono = localFont({
 });
 
 const Sidebar = () => {
-  // State to control drawer visibility
+  // State to track user authentication
+  const [user, setUser] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Ensure proper client-side rendering without hydration errors
-  const [isMounted, setIsMounted] = useState(false);
-
+  // Check if the user is authenticated using Firebase
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log("User is logged in:", currentUser);
+        setUser(currentUser);
+      } else {
+        console.log("User is not logged in");
+        setUser(null);
+      }
+    });
 
-  if (!isMounted) {
-    return null;
-  }
+    return () => unsubscribeAuth(); // Cleanup listener on unmount
+  }, []);
 
   // Toggle function for opening/closing the drawer
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
+
+
+  // Render nothing if the user is not logged in
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
