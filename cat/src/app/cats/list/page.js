@@ -20,6 +20,7 @@ import { auth } from "@/lib/firebaseClient";
 import { useAuthState } from "react-firebase-hooks/auth";
 import dayjs from "dayjs";
 import { defaultCatProfilePic } from "../data";
+import Notification from "@/app/components/Notification";
 
 const theme = createTheme({
   palette: {
